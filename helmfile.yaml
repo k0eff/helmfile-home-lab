@@ -1,0 +1,22 @@
+repositories:
+  - name: k8s-at-home
+    url: https://k8s-at-home.com/charts/
+
+
+releases:
+  - name: organizr-main
+    namespace: ns-homelab-main
+    chart: k8s-at-home/organizr
+    set:
+    - name: image.pullPolicy
+      value: IfNotPresent
+    values:
+    - templates/organizr/values.yaml.gotmpl
+
+helmBinary: helm
+helmDefaults:
+  kubeContext: kubernetes-admin@cluster00.local
+
+
+bases:
+  - environments.yaml
