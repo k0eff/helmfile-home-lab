@@ -16,4 +16,4 @@ apply:
 prephelm:
 	cd helm/packages/ && \
 		helm package ../charts/stClass/ && \
-		helm repo index . --url https://github.com/k0eff/helmfile-home-lab/tree/main/helm/packages/
+		helm repo index . --url https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
