@@ -1,0 +1,8 @@
+persistence:
+  config:
+    enabled: true
+env:
+  TZ: {{ .Values.defaults.timezone }}
+
+nodeSelector: 
+  kubernetes.io/hostname: node1

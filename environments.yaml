@@ -1,0 +1,5 @@
+environments:
+  cluster00:
+    values:
+      - values/common/shared.yaml
+      - values/env/cluster00/cluster00-vals.yaml
