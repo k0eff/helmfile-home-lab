@@ -1,0 +1,9 @@
+apiVersion: v2
+name: stClass
+description: Storage class
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+maintainers:
+  - name: Krasimir Koeff
+    url: github.com/k0eff

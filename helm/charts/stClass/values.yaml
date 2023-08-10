@@ -1,0 +1,6 @@
+storageClass:
+  name: ""
+  isDefaultClass: true
+  provisioner: csi.vsphere.vmware.com
+  storagePolicyName: "cluster00Policy"
+  fstype: "ext4"
