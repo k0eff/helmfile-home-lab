@@ -1,8 +1,16 @@
 persistence:
   config:
     enabled: true
+    storageClass: cluster00-storageclass-datastore1
+    size: 1Gi
 env:
   TZ: {{ .Values.defaults.timezone }}
 
-nodeSelector: 
-  kubernetes.io/hostname: node1
+
+service:
+  main:
+    type: NodePort
+    ports:
+      http:
+        enabled: true
+        nodePort: 32222
