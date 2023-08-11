@@ -5,5 +5,5 @@ storageClass:
   provisioner: "csi.vsphere.vmware.com"
   storagePolicyName: "cluster00Policy"
   fstype: "xfs"
-  reclaimPolicy: Retain
+  reclaimPolicy: Delete
   allowVolumeExpansion: true
