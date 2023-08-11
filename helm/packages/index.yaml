@@ -3,9 +3,9 @@ entries:
   stClass:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-08-11T01:24:32.737814+03:00"
+    created: "2023-08-11T18:29:54.348598+03:00"
     description: Storage class
-    digest: ca66308df47a3ef4738a021a18dbb074b78bb6dcba4d01d1ad3d25b5562c5e9f
+    digest: 70dc648e335f82c52d8d688b30c6985a09739ad439b248a7857b27aa7710e714
     maintainers:
     - name: Krasimir Koeff
       url: github.com/k0eff
@@ -14,4 +14,4 @@ entries:
     urls:
     - https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/stClass-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-11T01:24:32.737635+03:00"
+generated: "2023-08-11T18:29:54.347021+03:00"
