@@ -1,9 +1,19 @@
 repositories:
   - name: k8s-at-home
     url: https://k8s-at-home.com/charts/
-
-
+  - name: k0eff-home-lab-charts
+    url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
 releases:
+  - name: storage-class-default
+    namespace: ns-homelab-main
+    chart: k0eff-home-lab-charts/stClass
+    set:
+      - name: "storageClass.name"
+        value: cluster00-storageclass-datastore1
+      - name: "storageClass.fstype"
+        value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
+    createNamespace: false
+
   - name: organizr-main
     namespace: ns-homelab-main
     chart: k8s-at-home/organizr
@@ -12,6 +22,7 @@ releases:
       value: IfNotPresent
     values:
     - templates/organizr/values.yaml.gotmpl
+    installed: true
 
 helmBinary: helm
 helmDefaults:
