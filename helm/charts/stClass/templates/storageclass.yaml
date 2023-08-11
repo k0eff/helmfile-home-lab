@@ -3,8 +3,10 @@ kind: StorageClass
 metadata:
   name: {{ .Values.storageClass.name }}
   annotations:
-    storageclass.kubernetes.io/is-default-class: {{ .Values.storageClass.isDefaultClass }}
+    "storageclass.kubernetes.io/is-default-class": "{{ .Values.storageClass.isDefaultClass }}"
 provisioner: {{ .Values.storageClass.provisioner }}
 parameters:
   storagepolicyname: {{ .Values.storageClass.storagePolicyName }}
-  fstype: {{ .Values.storageClass.storagePolicyName }}
+  fstype: {{ .Values.storageClass.fstype }}
+reclaimPolicy: {{ .Values.storageClass.reclaimPolicy }}
+allowVolumeExpansion: {{ .Values.storageClass.allowVolumeExpansion }}
