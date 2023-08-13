@@ -5,7 +5,6 @@ repositories:
     url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
 releases:
   - name: storage-class-default
-    namespace: ns-homelab-main
     chart: k0eff-home-lab-charts/stClass
     set:
       - name: "storageClass.name"
