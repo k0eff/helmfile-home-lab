@@ -1,0 +1,4 @@
+cluster00:
+  values:
+    - values/common/shared.yaml
+    - values/cluster00/cluster00-vals.yaml

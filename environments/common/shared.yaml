@@ -1,0 +1,3 @@
+environments:
+{{ readFile "environments/cluster00/cluster00.yaml" | nindent 2 }}
+{{ readFile "environments/cluster01-dev/cluster01-dev.yaml" | nindent 2 }}

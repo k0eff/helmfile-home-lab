@@ -1,0 +1,33 @@
+commonLabels:
+  env: cluter00
+
+releases:
+  - name: storage-class-default
+    chart: k0eff-home-lab-charts/stClass
+    set:
+      - name: "storageClass.name"
+        value: {{ .Environment.Name }}-storageclass-datastore1
+      - name: "storageClass.fstype"
+        value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
+      - name: "storageClass.storagePolicyName"
+        value: {{ .Environment.Name }}Policy
+  - name: organizr-main
+    namespace: ns-homelab-main
+    chart: k8s-at-home/organizr
+    set:
+    - name: image.pullPolicy
+      value: IfNotPresent
+    values:
+    - ../../templates/organizr/values.yaml.gotmpl
+    installed: true
+
+helmDefaults:
+  kubeContext: kubernetes-admin@cluster00.local
+
+
+environments:
+  cluster00:
+    values:
+      - ../../values/common/shared.yaml
+      - ../../values/cluster00/cluster00-vals.yaml
+

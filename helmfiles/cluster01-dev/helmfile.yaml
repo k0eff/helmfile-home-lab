@@ -1,0 +1,41 @@
+helmDefaults:
+  kubeContext: kubernetes-admin@cluster01-dev.local
+missingFileHandler: Error
+
+
+repositories:
+  - name: k8s-at-home
+    url: https://k8s-at-home.com/charts/
+  - name: k0eff-home-lab-charts
+    url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
+
+releases:
+  - name: storage-class-default
+    chart: k0eff-home-lab-charts/stClass
+    set:
+      - name: "storageClass.name"
+        value: {{ .Environment.Name }}-storageclass-datastore1
+      - name: "storageClass.fstype"
+        value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
+      - name: "storageClass.storagePolicyName"
+        value: {{ .Environment.Name }}Policy
+    createNamespace: false
+  - name: organizr-main
+    namespace: ns-homelab-main
+    chart: k8s-at-home/organizr
+    set:
+    - name: image.pullPolicy
+      value: IfNotPresent
+    - name: persistence.size
+      value: 1Gi
+    values:
+    - ../../templates/organizr/values.yaml.gotmpl
+    installed: true
+
+
+environments:
+  cluster01-dev:
+    values:
+      - ../../values/common/shared.yaml
+      - ../../values/cluster01-dev/cluster01-dev-vals.yaml
+

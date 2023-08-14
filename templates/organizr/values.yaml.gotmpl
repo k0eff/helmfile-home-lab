@@ -1,7 +1,7 @@
 persistence:
   config:
     enabled: true
-    storageClass: cluster00-storageclass-datastore1
+    storageClass: {{ .Environment.Name }}-storageclass-datastore1
     size: 1Gi
 env:
   TZ: {{ .Values.defaults.timezone }}
