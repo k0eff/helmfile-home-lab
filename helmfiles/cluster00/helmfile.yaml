@@ -3,7 +3,7 @@ commonLabels:
 
 releases:
   - name: storage-class-default
-    chart: k0eff-home-lab-charts/stClass
+    chart: k0eff-home-lab-charts/helperChart
     set:
       - name: "storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
