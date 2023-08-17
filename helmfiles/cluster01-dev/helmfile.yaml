@@ -13,14 +13,26 @@ repositories:
 
 releases:
   - name: storage-class-default
-    chart: k0eff-home-lab-charts/helperChart
+    chart: ../../helm/charts/helperChart
     set:
+      - name: "storageClass.enabled"
+        value: true
       - name: "storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
       - name: "storageClass.fstype"
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
       - name: "storageClass.storagePolicyName"
         value: {{ .Environment.Name }}Policy
+  - name: namespace-metallb
+    chart: k0eff-home-lab-charts/helperChart
+    set:
+      - name: "namespace.enabled"
+        value: true
+      - name: "namespace.name"
+        value: "ns-metallb"
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+    - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
     createNamespace: false
   - name: organizr-main
     namespace: ns-homelab-main
@@ -31,12 +43,12 @@ releases:
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
-  - name: metallb-main
-    namespace: ns-homelab-main
-    chart: metallb/metallb
-    values:
-    - ../../templates/metallb/values.yaml.gotmpl
-    installed: true
+  # - name: metallb-main
+  #   namespace: ns-homelab-main
+  #   chart: metallb/metallb
+  #   values:
+  #   - ../../templates/metallb/values.yaml.gotmpl
+  #   installed: true
 
 
 environments:
