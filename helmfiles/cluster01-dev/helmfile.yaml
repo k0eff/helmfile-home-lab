@@ -13,7 +13,7 @@ repositories:
 
 releases:
   - name: storage-class-default
-    chart: ../../helm/charts/helperChart
+    chart: k0eff-home-lab-charts/helperChart
     set:
       - name: "storageClass.enabled"
         value: true
@@ -43,12 +43,12 @@ releases:
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
-  # - name: metallb-main
-  #   namespace: ns-homelab-main
-  #   chart: metallb/metallb
-  #   values:
-  #   - ../../templates/metallb/values.yaml.gotmpl
-  #   installed: true
+  - name: metallb-main
+    namespace: ns-homelab-main
+    chart: metallb/metallb
+    values:
+    - ../../templates/metallb/values.yaml.gotmpl
+    installed: true
 
 
 environments:
