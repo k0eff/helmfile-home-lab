@@ -14,9 +14,6 @@ releases:
   - name: organizr-main
     namespace: ns-homelab-main
     chart: k8s-at-home/organizr
-    set:
-    - name: image.pullPolicy
-      value: IfNotPresent
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
