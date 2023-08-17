@@ -1,3 +1,4 @@
+{{- if .Values.namespace }}
 {{- if .Values.namespace.enabled }}
 apiVersion: v1
 kind: Namespace
@@ -6,5 +7,6 @@ metadata:
   labels: 
 {{- range $key, $value := .Values.namespace.labels }}
     {{ $key }}: {{ $value | quote }}
+{{- end }}
 {{- end }}
 {{- end }}

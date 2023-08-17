@@ -1,3 +1,4 @@
+{{- if .Values.storageClass }}
 {{- if .Values.storageClass.enabled }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -11,4 +12,5 @@ parameters:
   fstype: {{ .Values.storageClass.fstype }}
 reclaimPolicy: {{ .Values.storageClass.reclaimPolicy }}
 allowVolumeExpansion: {{ .Values.storageClass.allowVolumeExpansion }}
+{{- end }}
 {{- end }}
