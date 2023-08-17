@@ -8,10 +8,12 @@ repositories:
     url: https://k8s-at-home.com/charts/
   - name: k0eff-home-lab-charts
     url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
+  - name: metallb
+    url: https://metallb.github.io/metallb/
 
 releases:
   - name: storage-class-default
-    chart: k0eff-home-lab-charts/stClass
+    chart: k0eff-home-lab-charts/helperChart
     set:
       - name: "storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
@@ -28,6 +30,12 @@ releases:
       value: 100Mi
     values:
     - ../../templates/organizr/values.yaml.gotmpl
+    installed: true
+  - name: metallb-main
+    namespace: ns-homelab-main
+    chart: metallb/metallb
+    values:
+    - ../../templates/metallb/values.yaml.gotmpl
     installed: true
 
 
