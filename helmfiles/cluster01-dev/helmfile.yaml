@@ -51,7 +51,7 @@ releases:
     chart: k8s-at-home/organizr
     set:
     - name: persistence.config.size
-      value: 200Mi
+      value: 500Mi
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
