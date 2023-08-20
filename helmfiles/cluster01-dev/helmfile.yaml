@@ -27,13 +27,13 @@ releases:
   - name: storage-class-default
     chart: k0eff-home-lab-charts/helperChart
     set:
-      - name: "storageClass.enabled"
+      - name: "helperchart.storageClass.enabled"
         value: true
-      - name: "storageClass.name"
+      - name: "helperchart.storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
-      - name: "storageClass.fstype"
+      - name: "helperchart.storageClass.fstype"
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
-      - name: "storageClass.storagePolicyName"
+      - name: "helperchart.storageClass.storagePolicyName"
         value: {{ .Environment.Name }}Policy
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart
