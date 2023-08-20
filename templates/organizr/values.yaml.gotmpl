@@ -8,12 +8,37 @@ env:
 
 
 service:
+#  svc-main:
+#    type: NodePort
+#    primary: true
+#    ports:
+#      http:
+#        enabled: true
+#        nodePort: 32222
   main:
-    type: NodePort
+    type: ClusterIP
+    primary: true
     ports:
       http:
         enabled: true
-        nodePort: 32222
+        port: 80
+
 
 image:
   pullPolicy: IfNotPresent
+
+ingress:
+  main:
+    enabled: true
+    primary: true
+    ingressClassName: main
+    annotations:
+#      "nginx.ingress.kubernetes.io/rewrite-target": /
+    hosts:
+      - host: organizr.koeff.com
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              name: organizr-main
+              port: 80
