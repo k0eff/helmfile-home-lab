@@ -21,7 +21,6 @@ environments: # envs need to be in a different part of the yaml, to avoid the ch
   default:
     values:
 
-
 ---
 
 releases:
@@ -39,7 +38,7 @@ releases:
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart
     set:
-      - name: "namespace.enabled"
+      - name: "helperchart.namespace.enabled"
         value: true
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
@@ -55,18 +54,18 @@ releases:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
   - name: metallb-main
-    namespace: {{.Values.namespace.name}}
+    namespace: {{.Values.helperchart.namespace.name}}
     chart: metallb/metallb
     installed: true
   - name: ipaddresspool-metallb
     chart: k0eff-home-lab-charts/helperChart
     set:
-      - name: "ipaddresspool.enabled"
+      - name: "helperchart.ipaddresspool.enabled"
         value: true
-      - name: "ipaddresspool.name"
+      - name: "helperchart.ipaddresspool.name"
         value: "internal"
-      - name: "ipaddresspool.namespace"
-        value: {{.Values.namespace.name}}
+      - name: "helperchart.ipaddresspool.namespace"
+        value: {{.Values.helperchart.namespace.name}}
     values:
     - ../../values/{{ .Environment.Name }}/ipaddresspool-metallb.yaml
     needs: # as it uses a CRD - make sure to run the diff after installing the CRDs with the metallb release

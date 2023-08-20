@@ -1,12 +1,14 @@
-{{- if .Values.namespace }}
-{{- if .Values.namespace.enabled }}
+{{- if .Values.helperchart}}
+{{- if .Values.helperchart.namespace }}
+{{- if .Values.helperchart.namespace.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.namespace.name }}
+  name: {{ .Values.helperchart.namespace.name }}
   labels: 
-{{- range $key, $value := .Values.namespace.labels }}
+{{- range $key, $value := .Values.helperchart.namespace.labels }}
     {{ $key }}: {{ $value | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

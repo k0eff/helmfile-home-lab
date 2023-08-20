@@ -1,16 +1,18 @@
-{{- if .Values.storageClass }}
-{{- if .Values.storageClass.enabled }}
+{{- if .Values.helperchart }}
+{{- if .Values.helperchart.storageClass }}
+{{- if .Values.helperchart.storageClass.enabled }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.storageClass.name }}
+  name: {{ .Values.helperchart.storageClass.name }}
   annotations:
-    "storageclass.kubernetes.io/is-default-class": "{{ .Values.storageClass.isDefaultClass }}"
-provisioner: {{ .Values.storageClass.provisioner }}
+    "storageclass.kubernetes.io/is-default-class": "{{ .Values.helperchart.storageClass.isDefaultClass }}"
+provisioner: {{ .Values.helperchart.storageClass.provisioner }}
 parameters:
-  storagepolicyname: {{ .Values.storageClass.storagePolicyName }}
-  fstype: {{ .Values.storageClass.fstype }}
-reclaimPolicy: {{ .Values.storageClass.reclaimPolicy }}
-allowVolumeExpansion: {{ .Values.storageClass.allowVolumeExpansion }}
+  storagepolicyname: {{ .Values.helperchart.storageClass.storagePolicyName }}
+  fstype: {{ .Values.helperchart.storageClass.fstype }}
+reclaimPolicy: {{ .Values.helperchart.storageClass.reclaimPolicy }}
+allowVolumeExpansion: {{ .Values.helperchart.storageClass.allowVolumeExpansion }}
+{{- end }}
 {{- end }}
 {{- end }}
