@@ -10,6 +10,19 @@ repositories:
     url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
   - name: metallb
     url: https://metallb.github.io/metallb/
+---
+
+environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
+  cluster01-dev:
+    values:
+      - ../../values/common/shared.yaml
+      - ../../values/cluster01-dev/cluster01-dev-vals.yaml
+      - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
+  default:
+    values:
+
+
+---
 
 releases:
   - name: storage-class-default
@@ -28,8 +41,6 @@ releases:
     set:
       - name: "namespace.enabled"
         value: true
-      - name: "namespace.name"
-        value: "ns-metallb"
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
     - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
@@ -44,16 +55,21 @@ releases:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
   - name: metallb-main
-    namespace: ns-homelab-main
+    namespace: {{.Values.namespace.name}}
     chart: metallb/metallb
-    values:
-    - ../../templates/metallb/values.yaml.gotmpl
     installed: true
-
-
-environments:
-  cluster01-dev:
+  - name: ipaddresspool-metallb
+    chart: k0eff-home-lab-charts/helperChart
+    set:
+      - name: "ipaddresspool.enabled"
+        value: true
+      - name: "ipaddresspool.name"
+        value: "internal"
+      - name: "ipaddresspool.namespace"
+        value: {{.Values.namespace.name}}
     values:
-      - ../../values/common/shared.yaml
-      - ../../values/cluster01-dev/cluster01-dev-vals.yaml
+    - ../../values/{{ .Environment.Name }}/ipaddresspool-metallb.yaml
+    needs: # as it uses a CRD - make sure to run the diff after installing the CRDs with the metallb release
+    - ns-metallb/metallb-main
+    installed: true
 
