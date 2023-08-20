@@ -51,7 +51,7 @@ releases:
     chart: k8s-at-home/organizr
     set:
     - name: persistence.config.size
-      value: 100Mi
+      value: 200Mi
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
@@ -79,4 +79,3 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
-
