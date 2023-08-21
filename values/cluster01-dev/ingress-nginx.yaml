@@ -1,2 +1,2 @@
 controller:
-  ingressClass: main
+  ingressClass: nginx
