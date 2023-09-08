@@ -12,6 +12,8 @@ repositories:
     url: https://metallb.github.io/metallb/
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
+  - name: nextcloud
+    url: https://nextcloud.github.io/helm/
 ---
 
 environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
@@ -79,3 +81,41 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
+  - name: nextcloud
+    chart: nextcloud/nextcloud
+    version: 4.2.1
+    set:
+      - name: image.repository
+        value: k0eff/nextcloud-full
+      - name: image.flavor
+        value: fpm
+      - name: image.tag
+        value: full
+      - name: ingress.className
+        value: nginx
+      - name: ingress.enabled
+        value: true
+      - name: nextcloud.host
+        value: nextcloud.kube.home
+      - name: nextcloud.username
+        value: koeff
+      - name: nextcloud.password
+        value: "1231fds23123"
+      - name: nginx.enabled
+        value: true
+      - name: peristence.enabled
+        value: false
+      - name: peristence.storageClass
+        value: {{ .Environment.Name }}-storageclass-datastore1
+      - name: nextcloud.extraInitContainers[0].name
+        value: install-smbclient
+      - name: nextcloud.extraInitContainers[0].image
+        value: nextcloud:stable-fpm-alpine
+      - name: nextcloud.extraInitContainers[0].command[0]
+        value: sh
+      - name: nextcloud.extraInitContainers[0].command[1]
+        value: "-c"
+      - name: nextcloud.extraInitContainers[0].command[2]
+        value: "apk add --no-cache procps samba-client"
+    needs:
+    - ns-metallb/metallb-main
