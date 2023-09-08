@@ -21,11 +21,21 @@ releases:
     values:
     - ../../templates/organizr/values.yaml.gotmpl
     installed: true
+  - name: namespace-metallb
+    chart: k0eff-home-lab-charts/helperChart
+    set:
+      - name: "helperchart.namespace.enabled"
+        value: true
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+    - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
+    createNamespace: false
+
 
 helmDefaults:
   kubeContext: kubernetes-admin@cluster00.local
 
-
+---
 environments:
   cluster00:
     values:
