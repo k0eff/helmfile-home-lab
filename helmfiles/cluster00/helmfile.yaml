@@ -1,6 +1,25 @@
 commonLabels:
   env: cluter00
 
+repositories:
+  - name: k8s-at-home
+    url: https://k8s-at-home.com/charts/
+  - name: k0eff-home-lab-charts
+    url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
+  - name: metallb
+    url: https://metallb.github.io/metallb/
+
+---
+environments:
+  cluster00:
+    values:
+      - ../../values/common/shared.yaml
+      - ../../values/cluster00/cluster00-vals.yaml
+      - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
+
+
+---
+
 releases:
   - name: storage-class-default
     chart: k0eff-home-lab-charts/helperChart
@@ -30,15 +49,12 @@ releases:
     - ../../templates/helperChart/values.yaml.gotmpl
     - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
     createNamespace: false
-
+  - name: metallb-main
+    namespace: {{.Values.helperchart.namespace.name}}
+    chart: metallb/metallb
+    installed: true
+    values:
+    - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
 
 helmDefaults:
   kubeContext: kubernetes-admin@cluster00.local
-
----
-environments:
-  cluster00:
-    values:
-      - ../../values/common/shared.yaml
-      - ../../values/cluster00/cluster00-vals.yaml
-
