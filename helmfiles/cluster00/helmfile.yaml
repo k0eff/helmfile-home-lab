@@ -19,6 +19,9 @@ environments:
 
 
 ---
+helmDefaults:
+  kubeContext: kubernetes-admin@cluster00.local
+
 
 releases:
   - name: storage-class-default
@@ -75,7 +78,11 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
+  - name: nextcloud
+    chart: nextcloud/nextcloud
+    version: 4.2.1
+    values:
+    - ../../values/{{ .Environment.Name }}/nextcloud.yaml.gotmpl
+    needs:
+    - ns-metallb/metallb-main
 
-
-helmDefaults:
-  kubeContext: kubernetes-admin@cluster00.local
