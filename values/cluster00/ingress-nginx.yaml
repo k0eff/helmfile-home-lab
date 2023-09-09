@@ -1,2 +1,6 @@
 controller:
   ingressClass: nginx
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"

@@ -1,0 +1,49 @@
+image:
+  repository: k0eff/nextcloud-full
+  tag: full
+  flavor: fpm
+nextcloud:
+  host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
+  configs:
+    preserveip.config.php: |-
+      <?php
+      $CONFIG = array (
+        'trusted_proxies' => array(
+          0 => '127.0.0.1',
+          1 => '{{ requiredEnv "NEXTCLOUD_PRESERVEIP_CIDR" }}',
+        ),
+        'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+      );
+  username: "{{ requiredEnv "NEXTCLOUD_USER" }}"
+  password: "{{ requiredEnv "NEXTCLOUD_PASS" }}"
+ingress:
+  className: nginx
+  enabled: true
+nginx:
+  enabled: true
+persistence:
+  enabled: true
+  storageClass: {{ .Environment.Name }}-storageclass-datastore1
+  accessMode: ReadWriteOnce
+internalDatabase:
+  enabled: false
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      auth:
+        database: "{{ requiredEnv "NEXTCLOUD_POSTGRE_DB" }}"
+        username: "{{ requiredEnv "NEXTCLOUD_POSTGRE_USER" }}"
+        password: "{{ requiredEnv "NEXTCLOUD_POSTGRE_PASS" }}"
+  primary:
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 8Gi
+      nextcloudData:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 100Gi
+metrics:
+  enabled: true
+  token: "{{ requiredEnv "NEXTCLOUD_METRICS_TOKEN" }}"
