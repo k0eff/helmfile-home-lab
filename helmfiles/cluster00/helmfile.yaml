@@ -55,6 +55,21 @@ releases:
     installed: true
     values:
     - ../../values/{{ .Environment.Name }}/namespace-metallb.yaml
+  - name: ipaddresspool-metallb
+    chart: k0eff-home-lab-charts/helperChart
+    set:
+      - name: "helperchart.ipaddresspool.enabled"
+        value: true
+      - name: "helperchart.ipaddresspool.name"
+        value: "internal"
+      - name: "helperchart.ipaddresspool.namespace"
+        value: {{.Values.helperchart.namespace.name}}
+    values:
+    - ../../values/{{ .Environment.Name }}/ipaddresspool-metallb.yaml
+    needs: # as it uses a CRD - make sure to run the diff after installing the CRDs with the metallb release
+    - ns-metallb/metallb-main
+    installed: true
+
 
 helmDefaults:
   kubeContext: kubernetes-admin@cluster00.local
