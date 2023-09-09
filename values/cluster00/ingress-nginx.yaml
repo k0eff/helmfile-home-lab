@@ -1,6 +1,9 @@
 controller:
   ingressClass: nginx
-ingress:
-  annotations:
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"
+  extraVolumes:
+    - name: cache-volume
+      emptyDir:
+        sizeLimit: 20Gi
+  extraVolumeMounts:
+    - mountPath: /tmp/nginx/client_body_temp_path
+      name: cache-volume
