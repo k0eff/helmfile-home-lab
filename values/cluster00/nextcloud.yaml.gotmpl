@@ -4,6 +4,7 @@ image:
   flavor: fpm
 nextcloud:
   host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
+  datadir: "/var/www/html/data"
   configs:
     preserveip.config.php: |-
       <?php
@@ -13,7 +14,16 @@ nextcloud:
           1 => '{{ requiredEnv "NEXTCLOUD_PRESERVEIP_CIDR" }}',
         ),
         'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
-      );
+      ); ?>
+    previews.config.php: |-
+      <?php
+      $CONFIG = array (
+        'enable_previews'           => true,
+        'preview_max_x'             => 2000,
+        'preview_max_y'             => 2000,
+        'preview_max_scale_factor'  => 2,
+        'preview jpeg_quality'      => 60
+        ); ?>
   username: "{{ requiredEnv "NEXTCLOUD_USER" }}"
   password: "{{ requiredEnv "NEXTCLOUD_PASS" }}"
 ingress:
@@ -31,6 +41,7 @@ persistence:
   enabled: true
   storageClass: {{ .Environment.Name }}-storageclass-datastore1
   accessMode: ReadWriteOnce
+  size: 100Gi
 internalDatabase:
   enabled: false
 postgresql:
@@ -46,10 +57,6 @@ postgresql:
       enabled: true
       accessMode: ReadWriteOnce
       size: 8Gi
-      nextcloudData:
-        enabled: true
-        accessMode: ReadWriteOnce
-        size: 100Gi
 metrics:
   enabled: true
   token: "{{ requiredEnv "NEXTCLOUD_METRICS_TOKEN" }}"
