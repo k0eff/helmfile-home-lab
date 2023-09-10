@@ -5,6 +5,11 @@ image:
 nextcloud:
   host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
   datadir: "/var/www/html/data"
+  phpConfigs:
+    nextcloud.ini: |-
+      memory_limit=3072M
+      upload_max_filesize=16G
+      post_max_size=16G
   configs:
     preserveip.config.php: |-
       <?php
@@ -24,8 +29,26 @@ nextcloud:
         'preview_max_scale_factor'  => 2,
         'preview jpeg_quality'      => 60
         ); ?>
+    upload.config.php: |-
+      <?php
+      $CONFIG = array( 
+        'files_max_chunk_size' => 73400320
+      ); ?>
   username: "{{ requiredEnv "NEXTCLOUD_USER" }}"
   password: "{{ requiredEnv "NEXTCLOUD_PASS" }}"
+  extraEnv:
+    - name: PHP_MEMORY_LIMIT
+      value: 3072M
+    - name: PHP_UPLOAD_LIMIT
+      value: 16G
+#  extraInitContainers:
+#    - name: setup-php-ini
+#      image: "k0eff/nextcloud-full:full"
+#      command: ["/bin/sh", "-c"]
+#      args:
+#        - echo "memory_limit=3072M" > /usr/local/etc/php/conf.d/nextcloud.ini
+#        - echo "upload_max_filesize=16G" > /usr/local/etc/php/conf.d/nextcloud.ini
+#        - echo "post_max_size=16G" > /usr/local/etc/php/conf.d/nextcloud.ini
 ingress:
   className: nginx
   enabled: true
@@ -60,3 +83,8 @@ postgresql:
 metrics:
   enabled: true
   token: "{{ requiredEnv "NEXTCLOUD_METRICS_TOKEN" }}"
+resources:
+  requests:
+    memory: 2536Mi
+  limits:
+    memory: 4Gi
