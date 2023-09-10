@@ -41,14 +41,6 @@ nextcloud:
       value: 3072M
     - name: PHP_UPLOAD_LIMIT
       value: 16G
-#  extraInitContainers:
-#    - name: setup-php-ini
-#      image: "k0eff/nextcloud-full:full"
-#      command: ["/bin/sh", "-c"]
-#      args:
-#        - echo "memory_limit=3072M" > /usr/local/etc/php/conf.d/nextcloud.ini
-#        - echo "upload_max_filesize=16G" > /usr/local/etc/php/conf.d/nextcloud.ini
-#        - echo "post_max_size=16G" > /usr/local/etc/php/conf.d/nextcloud.ini
 ingress:
   className: nginx
   enabled: true
