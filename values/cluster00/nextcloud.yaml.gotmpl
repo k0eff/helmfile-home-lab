@@ -48,10 +48,16 @@ ingress:
     "nginx.ingress.kubernetes.io/enable-cors": "true"
     "nginx.ingress.kubernetes.io/cors-allow-headers": "X-Forwarded-For"
     "nginx.ingress.kubernetes.io/proxy-body-size": "17179869184"
+    "nginx.ingress.kubernetes.io/proxy-buffering": "off"
     "nginx.ingress.kubernetes.io/proxy-max-temp-file-size": "17179869184"
-    "nginx.ingress.kubernetes.io/proxy_buffer_size": "16777216"
+    "nginx.ingress.kubernetes.io/proxy_buffer_size": "268435456"
 nginx:
   enabled: true
+  custom: |-
+    client_max_body_size 16G;
+    fastcgi_read_timeout 1800s;
+    client_body_temp_path /tmp/nginx/client_body_temp_path;
+    fastcgi_request_buffering off;
 persistence:
   enabled: true
   storageClass: {{ .Environment.Name }}-storageclass-datastore1
@@ -80,3 +86,16 @@ resources:
     memory: 2536Mi
   limits:
     memory: 4Gi
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: "{{ requiredEnv "NEXTCLOUD_REDIS_PASS" }}"
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+  replica:
+    persistence:
+      enabled: true
+      size: 8Gi
