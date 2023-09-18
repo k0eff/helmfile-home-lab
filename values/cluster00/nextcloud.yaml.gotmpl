@@ -2,6 +2,7 @@ image:
   repository: k0eff/nextcloud-full
   tag: full
   flavor: fpm
+  pullPolicy: Always
 nextcloud:
   host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
   datadir: "/var/www/html/data"
