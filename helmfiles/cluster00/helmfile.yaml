@@ -42,6 +42,11 @@ releases:
     chart: k8s-at-home/organizr
     values:
     - ../../templates/organizr/values.yaml.gotmpl
+    set:
+    - name: persistence.config.size
+      value: 1.05Gi
+    - name: persistence.config.enabled
+      value: true
     installed: true
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart
