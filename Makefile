@@ -26,6 +26,6 @@ prepdocker:
 	$(eval dockerPassword=$(shell cat $(dockerCredsDir)pass.creds))
 	$(shell for EACH in "Dockerfile" "supervisord.conf"; do curl $(url)$$EACH --output ${dir}$$EACH; done)
 	echo $(dockerPassword) | docker login -u $(dockerUsername) --password-stdin
-	docker build -t $(dockerUsername)/nextcloud-full:full ./docker/nextcloud-full/
+	docker build -t --no-cache $(dockerUsername)/nextcloud-full:full ./docker/nextcloud-full/
 	docker push $(dockerUsername)/nextcloud-full:full
 
