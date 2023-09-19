@@ -3,14 +3,19 @@ image:
   tag: full
   flavor: fpm
   pullPolicy: Always
+lifecycle:
+  postStartCommand:
+  - "sh"
+  - "-c"
+  - "apk add openrc && echo \"*/10 * * * * php /var/www/html/occ preview:pre-generate\" >> /etc/crontabs/www-data && start-stop-daemon --background /cron.sh"
 nextcloud:
   host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
   datadir: "/var/www/html/data"
   phpConfigs:
     nextcloud.ini: |-
-      memory_limit=3072M
       upload_max_filesize=16G
       post_max_size=16G
+      memory_limit=3584M
   configs:
     preserveip.config.php: |-
       <?php
@@ -39,7 +44,7 @@ nextcloud:
   password: "{{ requiredEnv "NEXTCLOUD_PASS" }}"
   extraEnv:
     - name: PHP_MEMORY_LIMIT
-      value: 3072M
+      value: 3584M
     - name: PHP_UPLOAD_LIMIT
       value: 16G
 ingress:
@@ -82,11 +87,11 @@ postgresql:
 metrics:
   enabled: true
   token: "{{ requiredEnv "NEXTCLOUD_METRICS_TOKEN" }}"
-resources:
-  requests:
-    memory: 2536Mi
-  limits:
-    memory: 4Gi
+# resources:
+#   requests:
+#     memory: 2536Mi
+#   limits:
+#     memory: 4Gi
 redis:
   enabled: true
   auth:
