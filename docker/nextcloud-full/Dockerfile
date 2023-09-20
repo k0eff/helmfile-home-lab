@@ -43,7 +43,7 @@ RUN mkdir -p \
     /var/log/supervisord \
     /var/run/supervisord \
 ;
-RUN cat <<EOF >> /usr/local/etc/php/conf.d/docker-fpm.ini
+RUN cat <<EOF | tee /usr/local/etc/php/conf.d/docker-fpm.ini /usr/local/etc/php/conf.d/nextcloud.ini 
 pm = dynamic
 pm.max_children = 120
 pm.start_servers = 12
