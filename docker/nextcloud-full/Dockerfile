@@ -43,12 +43,12 @@ RUN mkdir -p \
     /var/log/supervisord \
     /var/run/supervisord \
 ;
-RUN cat <<EOF | tee /usr/local/etc/php-fpm.d/www.conf \
-pm = dynamic \
-pm.max_children = 120 \
-pm.start_servers = 12 \
-pm.min_spare_servers = 6 \
-pm.max_spare_servers = 18
+RUN cat <<-EOF >> /usr/local/etc/php-fpm.d/www.conf
+    pm = dynamic
+    pm.max_children = 640
+    pm.start_servers = 40
+    pm.min_spare_servers = 24
+    pm.max_spare_servers = 40
 EOF
 
 COPY supervisord.conf /
