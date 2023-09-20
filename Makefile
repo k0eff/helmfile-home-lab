@@ -24,7 +24,7 @@ prepdocker:
 	$(eval dockerCredsDir=./protected/docker/)
 	$(eval dockerUsername=$(shell cat $(dockerCredsDir)user.creds))
 	$(eval dockerPassword=$(shell cat $(dockerCredsDir)pass.creds))
-	$(shell for EACH in "Dockerfile" "supervisord.conf"; do curl $(url)$$EACH --output ${dir}$$EACH; done)
+#	$(shell for EACH in "Dockerfile" "supervisord.conf"; do curl $(url)$$EACH --output ${dir}$$EACH; done) // disable this until a newer version is needed
 	echo $(dockerPassword) | docker login -u $(dockerUsername) --password-stdin
 	docker build --no-cache -t $(dockerUsername)/nextcloud-full:full ./docker/nextcloud-full/
 	docker push $(dockerUsername)/nextcloud-full:full
