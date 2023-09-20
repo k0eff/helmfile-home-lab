@@ -7,7 +7,7 @@ lifecycle:
   postStartCommand:
   - "sh"
   - "-c"
-  - "apk add openrc && echo \"*/10 * * * * php /var/www/html/occ preview:pre-generate\" >> /etc/crontabs/www-data && start-stop-daemon --background /cron.sh"
+  - "apk add openrc && echo \"*/10 * * * * php /var/www/html/occ preview:pre-generate\" >> /etc/crontabs/www-data && start-stop-daemon --background /cron.sh "
 nextcloud:
   host: "{{ requiredEnv "NEXTCLOUD_HOST" }}"
   datadir: "/var/www/html/data"
