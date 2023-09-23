@@ -86,6 +86,7 @@ releases:
   - name: nextcloud
     chart: nextcloud/nextcloud
     version: 4.2.1
+    installed: false
     values:
     - ../../values/{{ .Environment.Name }}/nextcloud.yaml.gotmpl
     needs:
