@@ -31,6 +31,8 @@ releases:
         value: true
       - name: "helperchart.storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
+      - name: "helperchart.storageClass.annotations.storageclass\\.kubernetes\\.io/is-default-class"
+        value: true
       - name: "helperchart.storageClass.parameters.fstype"
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
       - name: "helperchart.storageClass.parameters.storagePolicyName"
