@@ -8,7 +8,6 @@ repositories:
     url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
   - name: metallb
     url: https://metallb.github.io/metallb/
-
 ---
 environments:
   cluster00:
@@ -35,7 +34,7 @@ releases:
         value: true
       - name: "helperchart.storageClass.parameters.fstype"
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
-      - name: "helperchart.storageClass.parameters.storagePolicyName"
+      - name: "helperchart.storageClass.parameters.storagepolicyname"
         value: {{ .Environment.Name }}Policy
       - name: "helperchart.storageClass.allowVolumeExpansion"
         value: true
