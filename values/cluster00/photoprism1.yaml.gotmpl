@@ -1,0 +1,62 @@
+env:
+  TZ: "Europe/Sofia"
+  PHOTOPRISM_ADMIN_PASSWORD: "{{ requiredEnv "PHOTOPRISM1_ADMIN_PASSWORD" }}"
+  PHOTOPRISM_ORIGINALS_PATH: "/photoprism/originals"
+  PHOTOPRISM_PUBLIC: false
+  PHOTOPRISM_STORAGE_PATH: "/photoprism/storage"
+  PHOTOPRISM_SITE_URL: "https://{{ requiredEnv "PHOTOPRISM1_SITE_HOST" }}/"
+
+image:
+    pullPolicy: Always
+    repository: "photoprism/photoprism"
+    tag: "230719"
+
+ingress:
+    main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+            "nginx.ingress.kubernetes.io/enable-cors": "true"
+            "nginx.ingress.kubernetes.io/cors-allow-headers": "X-Forwarded-For"
+            "nginx.ingress.kubernetes.io/proxy-body-size": "17179869184"
+            "nginx.ingress.kubernetes.io/proxy-buffering": "off"
+            "nginx.ingress.kubernetes.io/proxy-max-temp-file-size": "17179869184"
+            "nginx.ingress.kubernetes.io/proxy_buffer_size": "268435456"
+        hosts:
+            -   host: photos.koeff.com
+                paths:
+                -   path: /
+                    pathType: Prefix
+                    service:
+                    # -- Overrides the service name reference for this path
+                    name: photoprism
+                    # -- Overrides the service port reference for this path
+                    port:
+                        number: 2342
+
+persistence:
+  nvme:
+    enabled: true
+    mountPath: /photoprism
+    storageClass: {{ .Environment.Name }}-storageclass-datastore1
+    size: 50Gi
+    accessMode: ReadWriteOnce
+  samba:
+    enabled: true
+    mountPath: /photoprism/originals
+    storageClass: {{ .Environment.Name }}-storageclass-smb1
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+mariadb:
+  enabled: false
+  architecture: standalone
+  auth:
+    database: photoprism
+    username: photoprism
+    password: photoprism
+    rootPassword: photoprism
+  primary:
+    persistence:
+      enabled: false
+      storageClass: {{ .Environment.Name }}-storageclass-datastore1
