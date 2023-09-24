@@ -21,6 +21,12 @@ volumeBindingMode: {{ .Values.helperchart.storageClass.volumeBindingMode }}
 {{- if .Values.helperchart.storageClass.allowVolumeExpansion }}
 allowVolumeExpansion: {{ .Values.helperchart.storageClass.allowVolumeExpansion }}
 {{- end }}
+{{- if .Values.helperchart.storageClass.mountOptions }}
+mountOptions: 
+{{- range .Values.helperchart.storageClass.mountOptions }}
+  - {{ . | quote }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
