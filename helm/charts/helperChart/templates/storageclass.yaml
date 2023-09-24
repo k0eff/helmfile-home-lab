@@ -13,7 +13,12 @@ parameters:
   {{ $key | quote }}: {{ $value | quote }}
 {{- end }}
 reclaimPolicy: {{ .Values.helperchart.storageClass.reclaimPolicy }}
+{{- if .Values.helperchart.storageClass.volumeBindingMode }}
+volumeBindingMode: {{ .Values.helperchart.storageClass.volumeBindingMode }}
+{{- end }}
+{{- if .Values.helperchart.storageClass.allowVolumeExpansion }}
 allowVolumeExpansion: {{ .Values.helperchart.storageClass.allowVolumeExpansion }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

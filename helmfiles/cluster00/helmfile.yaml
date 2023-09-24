@@ -35,6 +35,8 @@ releases:
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
       - name: "helperchart.storageClass.parameters.storagePolicyName"
         value: {{ .Environment.Name }}Policy
+      - name: "helperchart.storageClass.allowVolumeExpansion"
+        value: true
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
   - name: organizr-main
