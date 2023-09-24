@@ -2,7 +2,6 @@
 helperchart:
   storageClass:
     name: "cluster00-storage-datastore1"
-    isDefaultClass: "true"
     provisioner: "csi.vsphere.vmware.com"
     reclaimPolicy: Delete
     allowVolumeExpansion: true

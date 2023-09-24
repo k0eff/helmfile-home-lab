@@ -6,7 +6,9 @@ kind: StorageClass
 metadata:
   name: {{ .Values.helperchart.storageClass.name }}
   annotations:
-    "storageclass.kubernetes.io/is-default-class": "{{ .Values.helperchart.storageClass.isDefaultClass }}"
+{{- range $key, $value := .Values.helperchart.storageClass.annotations }}
+  {{ $key | quote }}: {{ $value | quote }}
+{{- end }}
 provisioner: {{ .Values.helperchart.storageClass.provisioner }}
 parameters:
 {{- range $key, $value := .Values.helperchart.storageClass.parameters }}
