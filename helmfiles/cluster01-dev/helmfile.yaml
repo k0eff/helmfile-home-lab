@@ -35,9 +35,9 @@ releases:
         value: true
       - name: "helperchart.storageClass.name"
         value: {{ .Environment.Name }}-storageclass-datastore1
-      - name: "helperchart.storageClass.fstype"
+      - name: "helperchart.storageClass.parameters.fstype"
         value: xfs # https://www.phoronix.com/review/linux-58-filesystems/4
-      - name: "helperchart.storageClass.storagePolicyName"
+      - name: "helperchart.storageClass.parameters.storagePolicyName"
         value: {{ .Environment.Name }}Policy
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart

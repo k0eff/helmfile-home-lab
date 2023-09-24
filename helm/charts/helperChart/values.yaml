@@ -4,7 +4,5 @@ helperchart:
     name: "cluster00-storage-datastore1"
     isDefaultClass: "true"
     provisioner: "csi.vsphere.vmware.com"
-    storagePolicyName: "cluster00Policy"
-    fstype: "xfs"
     reclaimPolicy: Delete
     allowVolumeExpansion: true
