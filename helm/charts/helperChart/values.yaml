@@ -4,4 +4,3 @@ helperchart:
     name: "cluster00-storage-datastore1"
     provisioner: "csi.vsphere.vmware.com"
     reclaimPolicy: Delete
-    allowVolumeExpansion: true
