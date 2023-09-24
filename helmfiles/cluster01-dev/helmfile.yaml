@@ -43,6 +43,8 @@ releases:
         value: {{ .Environment.Name }}Policy
       - name: "helperchart.storageClass.allowVolumeExpansion"
         value: true
+      - name: "helperchart.storageClass.provisioner"
+        value: "csi.vsphere.vmware.com"
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart
     set:
