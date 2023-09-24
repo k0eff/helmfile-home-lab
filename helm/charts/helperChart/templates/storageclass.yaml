@@ -9,8 +9,9 @@ metadata:
     "storageclass.kubernetes.io/is-default-class": "{{ .Values.helperchart.storageClass.isDefaultClass }}"
 provisioner: {{ .Values.helperchart.storageClass.provisioner }}
 parameters:
-  storagepolicyname: {{ .Values.helperchart.storageClass.storagePolicyName }}
-  fstype: {{ .Values.helperchart.storageClass.fstype }}
+{{- range $key, $value := .Values.helperchart.storageClass.parameters }}
+  {{ $key | quote }}: {{ $value | quote }}
+{{- end }}
 reclaimPolicy: {{ .Values.helperchart.storageClass.reclaimPolicy }}
 allowVolumeExpansion: {{ .Values.helperchart.storageClass.allowVolumeExpansion }}
 {{- end }}
