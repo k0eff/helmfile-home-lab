@@ -38,6 +38,8 @@ releases:
         value: {{ .Environment.Name }}Policy
       - name: "helperchart.storageClass.allowVolumeExpansion"
         value: true
+      - name: "helperchart.storageClass.provisioner"
+        value: "csi.vsphere.vmware.com"
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
   - name: organizr-main

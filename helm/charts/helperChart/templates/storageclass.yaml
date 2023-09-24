@@ -9,7 +9,9 @@ metadata:
 {{- range $key, $value := .Values.helperchart.storageClass.annotations }}
     {{ $key | quote }}: {{ $value | quote }}
 {{- end }}
+{{- if .Values.helperchart.storageClass.provisioner }}
 provisioner: {{ .Values.helperchart.storageClass.provisioner }}
+{{- end }}
 parameters:
 {{- range $key, $value := .Values.helperchart.storageClass.parameters }}
   {{ $key | quote }}: {{ $value | quote }}
