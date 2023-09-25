@@ -101,6 +101,14 @@ releases:
     - ns-metallb/metallb-main
 
 
+# SMB
+  - name: csi-driver-smb
+    chart: csi-driver-smb/csi-driver-smb
+    namespace: kube-system
+    version: 1.12.0
+
+
+# SMB1
   - name: secret-smb1
     chart: k0eff-home-lab-charts/helperChart
     namespace: ns-homelab-main
@@ -118,11 +126,6 @@ releases:
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
 
-  - name: csi-driver-smb
-    chart: csi-driver-smb/csi-driver-smb
-    namespace: kube-system
-    version: 1.12.0
-
   - name: storage-class-smb1
     chart: k0eff-home-lab-charts/helperChart
     installed: true
@@ -134,7 +137,7 @@ releases:
       - name: "helperchart.storageClass.provisioner"
         value: "smb.csi.k8s.io"
       - name: "helperchart.storageClass.parameters.source"
-        value: "//192.168.31.151/koeff/Photos/Camera"
+        value: "{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_ADDRESS" }}"
       - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
         value: "secret-smb-{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_SECRET_SUFFIX" }}"
       - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
@@ -168,3 +171,67 @@ releases:
     - kube-system/csi-driver-smb
     - ns-homelab-main/secret-smb1
 
+
+# SMB 2
+
+  - name: secret-smb2
+    chart: k0eff-home-lab-charts/helperChart
+    namespace: ns-homelab-main
+    set:
+      - name: "helperchart.secret.enabled"
+        value: true
+      - name: "helperchart.secret.name"
+        value: secret-smb-{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_SECRET_SUFFIX" }}
+      - name: "helperchart.secret.namespace"
+        value: ns-homelab-main
+      - name: "helperchart.secret.data.username"
+        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_USERNAME" }}"
+      - name: "helperchart.secret.data.password"
+        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_PASSWORD" }}"
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+
+  - name: storage-class-smb2
+    chart: k0eff-home-lab-charts/helperChart
+    installed: true
+    set:
+      - name: "helperchart.storageClass.enabled"
+        value: true
+      - name: "helperchart.storageClass.name"
+        value: {{ .Environment.Name }}-storageclass-smb2
+      - name: "helperchart.storageClass.provisioner"
+        value: "smb.csi.k8s.io"
+      - name: "helperchart.storageClass.parameters.source"
+        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_ADDRESS" }}"
+      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
+        value: "secret-smb-{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_SECRET_SUFFIX" }}"
+      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
+        value: "ns-homelab-main"
+      - name: "helperchart.storageClass.reclaimPolicy"
+        value: Delete
+      - name: "helperchart.storageClass.volumeBindingMode"
+        value: Immediate
+      - name: "helperchart.storageClass.mountOptions[0]"
+        value: dir_mode=0444
+      - name: "helperchart.storageClass.mountOptions[1]"
+        value: file_mode=0444
+      - name: "helperchart.storageClass.mountOptions[2]"
+        value: uid=0
+      - name: "helperchart.storageClass.mountOptions[3]"
+        value: gid=0
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+    needs:
+    - ns-metallb/metallb-main
+
+
+  - name: photoprism2
+    chart: k8s-at-home/photoprism
+    installed: true
+    namespace: ns-homelab-main
+    version: 5.0.0
+    values:
+    - ../../values/{{ .Environment.Name }}/photoprism2.yaml.gotmpl
+    needs:
+    - kube-system/csi-driver-smb
+    - ns-homelab-main/secret-smb2
