@@ -14,6 +14,8 @@ repositories:
     url: https://kubernetes.github.io/ingress-nginx
   - name: nextcloud
     url: https://nextcloud.github.io/helm/
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
 ---
 
 environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
@@ -125,3 +127,20 @@ releases:
         value: "apk add --no-cache procps samba-client"
     needs:
     - ns-metallb/metallb-main
+  - name: prometheus
+    chart: prometheus-community/prometheus
+    version: "25.6.0"
+    installed: true
+    set: 
+    - name: configmapReload.prometheus.image.tag
+      value: v0.67.0
+    - name: server.image.tag
+      value: v2.48.0
+    - name: server.ingress.enabled
+      value: true
+    - name: server.ingress.ingressClassName
+      value: nginx
+    - name: server.ingress.hosts[0]
+      value: prometheus.kube.home
+    - name: server.ingress.path
+      value: /
