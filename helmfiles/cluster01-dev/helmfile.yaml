@@ -16,6 +16,8 @@ repositories:
     url: https://nextcloud.github.io/helm/
   - name: prometheus-community
     url: https://prometheus-community.github.io/helm-charts
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
 ---
 
 environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
@@ -144,3 +146,18 @@ releases:
       value: prometheus.kube.home
     - name: server.ingress.path
       value: /
+  - name: grafana
+    chart: grafana/grafana
+    version: 7.0.8
+    installed: true
+    set:
+    - name: ingress.enabled
+      value: true
+    - name: ingress.ingressClassName
+      value: nginx
+    - name: ingress.hosts[0]
+      value: grafana.kube.home
+    values:
+    - ../../values/{{ .Environment.Name }}/grafana-dashboard.yaml
+
+
