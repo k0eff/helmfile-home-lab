@@ -31,3 +31,7 @@ dashboards:
     k8s-views-pods:
       url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
       token: ''
+  general:
+    node-exporter-full:
+      url: https://github.com/rfmoz/grafana-dashboards/blob/master/prometheus/node-exporter-full.json
+      token: ''
