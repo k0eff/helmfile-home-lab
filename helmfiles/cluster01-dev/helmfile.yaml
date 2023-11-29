@@ -5,7 +5,7 @@ missingFileHandler: Error
 
 repositories:
   - name: k8s-at-home
-    url: https://k8s-at-home.com/charts/
+    url: https://github.com/k0eff/k8s-at-home-charts/raw/master/koeff/packages
   - name: k0eff-home-lab-charts
     url: https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/
   - name: metallb
