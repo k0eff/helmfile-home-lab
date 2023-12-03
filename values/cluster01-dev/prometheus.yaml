@@ -1,7 +1,7 @@
 server:
   image:
     tag: v2.48.0
-
+  retention: 60d
 
   ingress:
     enabled: true
