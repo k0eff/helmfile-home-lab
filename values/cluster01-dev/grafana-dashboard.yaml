@@ -43,3 +43,12 @@ dashboards:
     node-exporter-full:
       url: https://raw.githubusercontent.com/rfmoz/grafana-dashboards/master/prometheus/node-exporter-full.json
       token: ''
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.default.svc.cluster01-dev.local
+      access: proxy
+      isDefault: true
