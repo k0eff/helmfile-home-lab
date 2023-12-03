@@ -11,6 +11,14 @@ dashboardProviders:
       editable: true
       options:
         path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
+    - name: 'vm-nodes'
+      orgId: 1
+      folder: 'vm-nodes'
+      type: file
+      disableDeletion: true
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/vm-nodes
 dashboards:
   grafana-dashboards-kubernetes:
     k8s-system-api-server:
@@ -31,7 +39,7 @@ dashboards:
     k8s-views-pods:
       url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
       token: ''
-  general:
+  vm-nodes:
     node-exporter-full:
-      url: https://github.com/rfmoz/grafana-dashboards/blob/master/prometheus/node-exporter-full.json
+      url: https://raw.githubusercontent.com/rfmoz/grafana-dashboards/master/prometheus/node-exporter-full.json
       token: ''
