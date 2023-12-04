@@ -11,7 +11,39 @@ server:
     path: "/"
 
 
+alertmanager:
+  enabled: true
+  config:
+    enabled: true
+    route:
+      group_wait: 10m
+      group_interval: 30m
+      receiver: primary-receiver
+      repeat_interval: 8h
+    receivers:
+    - name: primary-receiver
+      email_configs:
+      - smarthost: 'smtp.gmail.com:587'
+        auth_username: '{{ requiredEnv "PROM_ALERTMANAGER_SMTP_USERNAME" }}'
+        auth_password: '{{ requiredEnv "PROM_ALERTMANAGER_SMTP_PASSWORD" }}'
+        from: '{{ requiredEnv "PROM_ALERTMANAGER_HEADER_FROM" }}'
+        to: '{{ requiredEnv "PROM_ALERTMANAGER_HEADER_TO" }}'
+        headers:
+          subject: '<prometheus.kube.home alert>'
+
+
 serverFiles:
+  "alerting_rules.yml":
+    groups:
+    - name: freespace
+      rules:
+      - alert: FreeSpaceTooLow
+        expr: 'node_filesystem_avail_bytes{mountpoint="/", fstype="ext4"} < 5368709120' # 5*1024*1024*1024
+        for: 5m
+        labels:
+          severity: medium
+        annotations:
+          summary: Low free space
   "prometheus.yml":
     scrape_configs:
     - job_name: localVms

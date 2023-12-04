@@ -135,7 +135,7 @@ releases:
     installed: true
     recreatePods: true
     values:
-    - ../../values/{{ .Environment.Name }}/prometheus.yaml
+    - ../../values/{{ .Environment.Name }}/prometheus.yaml.gotmpl
   - name: grafana
     chart: grafana/grafana
     version: 7.0.8
