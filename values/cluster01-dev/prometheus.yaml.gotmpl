@@ -30,6 +30,15 @@ alertmanager:
         to: '{{ requiredEnv "PROM_ALERTMANAGER_HEADER_TO" }}'
         headers:
           subject: '<prometheus.kube.home alert>'
+  ingress:
+    enabled: true
+    className: nginx
+    hosts: 
+    - host: alertmanager.kube.home
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+
 
 
 serverFiles:
