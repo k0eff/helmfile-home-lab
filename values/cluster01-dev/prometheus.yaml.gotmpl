@@ -47,7 +47,7 @@ serverFiles:
     - name: freespace
       rules:
       - alert: FreeSpaceTooLow
-        expr: 'node_filesystem_avail_bytes{mountpoint="/", fstype="ext4"} < 5368709120' # 5*1024*1024*1024
+        expr: 'node_filesystem_avail_bytes{mountpoint="/", fstype="ext4", job="kubernetes-service-endpoints"} < 5368709120' # 5*1024*1024*1024
         for: 5m
         labels:
           severity: medium
