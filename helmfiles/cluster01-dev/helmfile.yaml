@@ -18,6 +18,8 @@ repositories:
     url: https://prometheus-community.github.io/helm-charts
   - name: grafana
     url: https://grafana.github.io/helm-charts
+  - name: jetstack
+    url: https://charts.jetstack.io
 ---
 
 environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
@@ -149,5 +151,11 @@ releases:
       value: grafana.kube.home
     values:
     - ../../values/{{ .Environment.Name }}/grafana-dashboard.yaml
-
-
+  - name: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.13.2
+    installed: true
+    namespace: cert-manager
+    set:
+    - name: prometheus.enabled
+      value: false
