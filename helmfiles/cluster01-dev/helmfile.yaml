@@ -20,6 +20,8 @@ repositories:
     url: https://grafana.github.io/helm-charts
   - name: jetstack
     url: https://charts.jetstack.io
+  - name: adfinis
+    url: https://charts.adfinis.com
 ---
 
 environments: # envs need to be in a different part of the yaml, to avoid the chicken&egg problem
@@ -159,3 +161,32 @@ releases:
     set:
     - name: prometheus.enabled
       value: false
+    - name: installCRDs
+      value: true
+  - name: cert-manager-tokens
+    chart: k0eff-home-lab-charts/helperChart
+    installed: true
+    namespace: cert-manager
+    needs:
+    - cert-manager/cert-manager
+    set:
+      - name: "helperchart.secret.enabled"
+        value: true
+      - name: "helperchart.secret.name"
+        value: cert-manager-cloudflare-token-secret
+      - name: "helperchart.secret.namespace"
+        value: cert-manager
+      - name: "helperchart.secret.data.token"
+        value: "{{ requiredEnv "CERT_MANAGER_CLOUDFLARE_TOKEN" }}"
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+  - name: cert-manager-issuers
+    chart: adfinis/cert-manager-issuers
+    version: 0.2.5
+    installed: true
+    namespace: cert-manager
+    needs:
+    - cert-manager/cert-manager-tokens
+    - cert-manager/cert-manager
+    values:
+    - ../../values/{{ .Environment.Name }}/cert-manager-issuers.yaml.gotmpl
