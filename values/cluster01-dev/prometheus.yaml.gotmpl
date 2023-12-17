@@ -7,8 +7,14 @@ server:
     enabled: true
     ingressClassName: nginx
     hosts:
-    - prometheus.kube.home
-    path: "/"
+    - prometheus.local.koeff.com
+    path: /
+    tls:
+    - secretName: cloudflare-cluster01-dev-prometheus
+      hosts:
+      - prometheus.local.koeff.com
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
 
 
 alertmanager:
@@ -29,15 +35,21 @@ alertmanager:
         from: '{{ requiredEnv "PROM_ALERTMANAGER_HEADER_FROM" }}'
         to: '{{ requiredEnv "PROM_ALERTMANAGER_HEADER_TO" }}'
         headers:
-          subject: '<prometheus.kube.home alert>'
+          subject: '<prometheus.local.koeff.com alert>'
   ingress:
     enabled: true
     className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
     hosts: 
-    - host: alertmanager.kube.home
+    - host: alertmanager.local.koeff.com
       paths:
       - path: /
         pathType: ImplementationSpecific
+    tls:
+    - secretName: cloudflare-cluster01-dev-alertmanager
+      hosts:
+      - alertmanager.local.koeff.com
 
 
 

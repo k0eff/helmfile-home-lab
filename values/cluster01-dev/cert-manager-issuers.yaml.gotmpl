@@ -1,0 +1,19 @@
+_: &email {{ requiredEnv "CERT_MANAGER_CLOUDFLARE_EMAIL" }}
+_: &solvers
+- dns01:
+    cloudflare:
+      email: {{ requiredEnv "CERT_MANAGER_CLOUDFLARE_EMAIL" }}
+      apiTokenSecretRef: #https://github.com/cert-manager/cert-manager/issues/2384
+        name: cert-manager-cloudflare-token-secret
+        key: token
+
+
+clusterIssuers:
+- name: cloudflare-cluster01-dev
+  spec:
+    acme:
+      server: https://acme-v02.api.letsencrypt.org/directory
+      privateKeySecretRef:
+        name: cluster-issuer-account-key
+      email: *email
+      solvers: *solvers
