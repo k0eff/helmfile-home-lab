@@ -144,13 +144,6 @@ releases:
     chart: grafana/grafana
     version: 7.0.8
     installed: true
-    set:
-    - name: ingress.enabled
-      value: true
-    - name: ingress.ingressClassName
-      value: nginx
-    - name: ingress.hosts[0]
-      value: grafana.kube.home
     values:
     - ../../values/{{ .Environment.Name }}/grafana-dashboard.yaml
   - name: cert-manager
