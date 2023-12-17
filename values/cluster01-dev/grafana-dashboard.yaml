@@ -1,3 +1,15 @@
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+  - grafana.local.koeff.com
+  tls:
+  - secretName: cloudflare-cluster01-dev-grafana
+    hosts:
+    - grafana.local.koeff.com
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+
 # Provision grafana-dashboards-kubernetes
 dashboardProviders:
   dashboardproviders.yaml:
