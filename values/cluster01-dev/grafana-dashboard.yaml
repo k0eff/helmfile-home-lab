@@ -55,6 +55,9 @@ dashboards:
     node-exporter-full:
       url: https://raw.githubusercontent.com/rfmoz/grafana-dashboards/master/prometheus/node-exporter-full.json
       token: ''
+    smartmon:
+      url: https://raw.githubusercontent.com/k0eff/S.M.A.R.T-disk-monitoring-for-Prometheus/master/grafana/dashboards/13654_rev2.json
+      token: ''
 datasources:
   datasources.yaml:
     apiVersion: 1
