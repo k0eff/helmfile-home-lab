@@ -65,6 +65,13 @@ serverFiles:
           severity: medium
         annotations:
           summary: Low free space
+      - alert: SmartHealthCheckFailed
+        expr: 'smartmon_device_smart_healthy{disk="/dev/sdb", job="localVms", type="sat"} < 1'
+        for: 5m
+        labels:
+          severity: high
+        annotations:
+          summary: SMART Healthcheck failed
   "prometheus.yml":
     scrape_configs:
     - job_name: localVms
