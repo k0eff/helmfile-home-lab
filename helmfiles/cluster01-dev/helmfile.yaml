@@ -187,20 +187,3 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/cert-manager-issuers.yaml.gotmpl
 
-  - name: elastic-operator
-    chart: elastic/eck-operator
-    version: 2.10.0
-    installed: true
-    namespace: elastic-system
-    set:
-      - name: installCRDs
-        value: true
-      - name: createClusterScopedResources
-        value: true
-  - name: elastic-stack
-    chart: elastic/eck-stack
-    version: 0.8.0
-    installed: true
-    namespace: elastic-system
-    values:
-    - ../../values/{{ .Environment.Name }}/eck-stack.yaml.gotmpl
