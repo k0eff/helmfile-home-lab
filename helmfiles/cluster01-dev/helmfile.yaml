@@ -24,6 +24,9 @@ repositories:
     url: https://charts.adfinis.com
   - name: elastic
     url: https://helm.elastic.co
+  - name: cloudnativeapp
+    url: https://cloudnativeapp.github.io/charts/curated/
+
 
 ---
 
@@ -187,3 +190,10 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/cert-manager-issuers.yaml.gotmpl
 
+  - name: es-creds
+    chart: cloudnativeapp/raw
+    version: 0.2.3
+    installed: true
+    namespace: elastic-system
+    values:
+    - ../../values/{{ .Environment.Name }}/es-creds.yaml.gotmpl

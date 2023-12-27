@@ -1,0 +1,10 @@
+templates: 
+- |
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: es-creds
+    namespace: elastic-system
+  stringData:
+    username: elastic
+    password: {{ requiredEnv "ES_CREDS_PASSWORD" }}
