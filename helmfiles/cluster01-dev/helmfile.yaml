@@ -197,3 +197,11 @@ releases:
     namespace: elastic-system
     values:
     - ../../values/{{ .Environment.Name }}/es-creds.yaml.gotmpl
+
+  - name: elasticsearch
+    chart: elastic/elasticsearch
+    version: 8.5.1
+    installed: true
+    namespace: elastic-system
+    values:
+    - ../../values/{{ .Environment.Name }}/elasticsearch.yaml.gotmpl

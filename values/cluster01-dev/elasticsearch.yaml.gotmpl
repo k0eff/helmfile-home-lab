@@ -1,0 +1,23 @@
+replicas: 1
+secret:
+    enabled: false
+extraEnvs:
+-   name: ELASTIC_USERNAME
+    valueFrom:
+        secretKeyRef:
+            name: es-creds
+            key: username
+-   name: ELASTIC_PASSWORD
+    valueFrom:
+        secretKeyRef:
+            name: es-creds
+            key: password
+resources:
+  requests:
+    cpu: "100m"
+    memory: "2Gi"
+volumeClaimTemplate:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 10Gi
