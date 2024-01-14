@@ -26,6 +26,8 @@ repositories:
     url: https://helm.elastic.co
   - name: cloudnativeapp
     url: https://cloudnativeapp.github.io/charts/curated/
+  - name: metrics-server
+    url: https://kubernetes-sigs.github.io/metrics-server
 
 
 ---
@@ -139,6 +141,13 @@ releases:
         value: "apk add --no-cache procps samba-client"
     needs:
     - ns-metallb/metallb-main
+  - name: metrics-server
+    chart: metrics-server/metrics-server
+    version: "3.11.0"
+    installed: true
+    recreatePods: true
+    values:
+    - ../../values/{{ .Environment.Name }}/metrics-server.yaml.gotmpl
   - name: prometheus
     chart: prometheus-community/prometheus
     version: "25.6.0"
