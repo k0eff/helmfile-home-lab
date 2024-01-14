@@ -13,6 +13,9 @@ diff:
 apply:
 	helmfile -e ${HFL_ENV} apply
 
+template:
+	helmfile -e ${HFL_ENV} template
+
 prephelm:
 	cd helm/packages/ && \
 		helm package ../charts/helperChart/ && \
