@@ -3,6 +3,9 @@ server:
     tag: v2.48.0
   retention: 60d
 
+  persistentVolume:
+    size: 24Gi
+
   ingress:
     enabled: true
     ingressClassName: nginx
