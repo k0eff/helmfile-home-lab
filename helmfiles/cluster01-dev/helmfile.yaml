@@ -82,6 +82,7 @@ releases:
   - name: metallb-main
     namespace: {{.Values.helperchart.namespace.name}}
     chart: metallb/metallb
+    version: "0.13.12" #TODO: upgrade the version
     installed: true
   - name: ipaddresspool-metallb
     chart: k0eff-home-lab-charts/helperChart
