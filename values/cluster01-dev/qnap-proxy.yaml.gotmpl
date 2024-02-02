@@ -1,0 +1,111 @@
+resources:
+
+
+
+-   apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+        name: qnap-ingress-share
+        annotations:
+            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/rewrite-target: /qumagie/sl/$1
+    spec:
+        ingressClassName: nginx
+        tls:
+        -   hosts:
+            -   share.koeff.com
+            secretName: qnap-proxy-cluster01-dev-tls
+        rules:
+        -   host: share.koeff.com
+            http:
+                paths:
+                -   path: /sl/(.*)
+                    pathType: ImplementationSpecific
+                    backend:
+                        service:
+                            name: qnap-qumagie-service
+                            port:
+                                number: 8090
+
+
+-   apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+        name: qnap-ingress-share
+        annotations:
+            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/rewrite-target: /qumagie/share/$1
+    spec:
+        ingressClassName: nginx
+        tls:
+        -   hosts:
+            -   share.koeff.com
+            secretName: qnap-proxy-cluster01-dev-tls
+        rules:
+        -   host: share.koeff.com
+            http:
+                paths:
+                -   path: /share/(.*)
+                    pathType: ImplementationSpecific
+                    backend:
+                        service:
+                            name: qnap-qumagie-service
+                            port:
+                                number: 8090
+
+
+-   apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+        name: qnap-ingress-qumagie
+        annotations:
+            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/rewrite-target: /qumagie/$1
+    spec:
+        ingressClassName: nginx
+        tls:
+        -   hosts:
+            -   share.koeff.com
+            secretName: qnap-proxy-cluster01-dev-tls
+        rules:
+        -   host: share.koeff.com
+            http:
+                paths:
+                -   path: /qumagie/(.*)
+                    pathType: ImplementationSpecific
+                    backend:
+                        service:
+                            name: qnap-qumagie-service
+                            port:
+                                number: 8090
+
+
+-   apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+        name: qnap-ingress-v3menu
+        annotations:
+            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/rewrite-target: /v3_menu/$1
+    spec:
+        ingressClassName: nginx
+        tls:
+        -   hosts:
+            -   share.koeff.com
+            secretName: qnap-proxy-cluster01-dev-tls
+        rules:
+        -   host: share.koeff.com
+            http:
+                paths:
+                -   path: /v3_menu/(.*)
+                    pathType: ImplementationSpecific
+                    backend:
+                        service:
+                            name: qnap-qumagie-service
+                            port:
+                                number: 8090
+

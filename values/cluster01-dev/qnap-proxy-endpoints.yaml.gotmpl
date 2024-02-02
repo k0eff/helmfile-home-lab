@@ -1,0 +1,13 @@
+templates:
+-   |
+    apiVersion: v1
+    kind: Endpoints
+    metadata:
+        name: qnap-qumagie-service
+    subsets:
+    -   addresses:
+        -   ip: 192.168.31.108
+        ports:
+        -   port: 8080
+
+

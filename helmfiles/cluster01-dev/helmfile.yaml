@@ -82,7 +82,7 @@ releases:
   - name: metallb-main
     namespace: {{.Values.helperchart.namespace.name}}
     chart: metallb/metallb
-    version: "0.13.12" #TODO: upgrade the version
+    version: "0.13.12"
     installed: true
   - name: ipaddresspool-metallb
     chart: k0eff-home-lab-charts/helperChart
@@ -98,6 +98,7 @@ releases:
     needs: # as it uses a CRD - make sure to run the diff after installing the CRDs with the metallb release
     - ns-metallb/metallb-main
     installed: true
+
   - name: ingress-nginx-main
     chart: ingress-nginx/ingress-nginx
     version: 4.7.1
@@ -142,6 +143,36 @@ releases:
         value: "apk add --no-cache procps samba-client"
     needs:
     - ns-metallb/metallb-main
+
+
+
+  - name: qnap-proxy-endpoints
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/{{ .Environment.Name }}/qnap-proxy-endpoints.yaml.gotmpl
+
+  - name: qnap-proxy-service
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs: 
+    - ns-homelab-main/qnap-proxy-endpoints
+    values:
+    - ../../values/{{ .Environment.Name }}/qnap-proxy-service.yaml.gotmpl
+
+  - name: qnap-proxy
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs: 
+    - ns-homelab-main/qnap-proxy-service
+    values:
+    - ../../values/{{ .Environment.Name }}/qnap-proxy.yaml.gotmpl
+
+
+
   - name: metrics-server
     chart: metrics-server/metrics-server
     version: "3.11.0"
