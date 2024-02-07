@@ -1,0 +1,18 @@
+controller:
+    service:
+        enabled: true
+
+staticSiteConfigmap: nginx-url-converter-static-site
+
+
+ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: shareurl.koeff.com
+    path: /
+    tls:
+    -   secretName: cloudflare-cluster01-dev-prometheus
+        hosts:
+        - shareurl.koeff.com
+    annotations:
+        cert-manager.io/cluster-issuer: cloudflare-cluster01-dev

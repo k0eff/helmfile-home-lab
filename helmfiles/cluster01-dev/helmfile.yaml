@@ -22,6 +22,8 @@ repositories:
     url: https://charts.jetstack.io
   - name: adfinis
     url: https://charts.adfinis.com
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
   - name: elastic
     url: https://helm.elastic.co
   - name: cloudnativeapp
@@ -171,6 +173,21 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/qnap-proxy.yaml.gotmpl
 
+  - name: nginx-url-converter-static-site
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/{{ .Environment.Name }}/nginx-url-converter-static-site.yaml.gotmpl
+
+
+  - name: nginx-url-converter
+    chart: bitnami/nginx
+    version: 15.10.1
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/{{ .Environment.Name }}/nginx-url-converter.yaml.gotmpl
 
 
   - name: metrics-server

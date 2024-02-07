@@ -1,0 +1,151 @@
+templates:
+-   |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+        name: nginx-url-converter-static-site
+    data:
+        index.html: |
+            <!DOCTYPE html>
+            <html lang="en">
+            <!-- Wow, ChatGPT, you аre awesome! -->
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>share.koeff.com URL Converter</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .container {
+                        max-width: 600px;
+                        margin: 50px auto;
+                        background-color: #fff;
+                        border-radius: 5px;
+                        padding: 20px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+
+                    h2 {
+                        color: #333;
+                    }
+
+                    .input-container,
+                    .output-container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+                    }
+
+                    input[type="text"] {
+                        flex: 1;
+                        padding: 8px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        box-sizing: border-box;
+                        margin-top: 5px;
+                    }
+
+                    button {
+                        background-color: #4caf50;
+                        color: #fff;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+
+                    button:hover {
+                        background-color: #45a049;
+                    }
+
+                    .copy-icon {
+                        width: 20px;
+                        height: 20px;
+                        background-image: url('https://img.icons8.com/material-outlined/24/000000/copy--v1.png');
+                        background-size: cover;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-right: 5px;
+                    }
+
+                    .copy-button {
+                        background-color: #4caf50;
+                        color: #fff;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+
+                    .copy-button:hover {
+                        background-color: #45a049;
+                    }
+
+                    .output-text {
+                        flex: 1;
+                        padding: 8px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        box-sizing: border-box;
+                        margin-right: 10px;
+                    }
+
+                    .subtitle {
+                        margin-bottom: 5px;
+                        display: block;
+                    }
+
+                    #urlInput {
+                        width: 351px; 
+                        height: 36px;
+                    }
+                </style>
+                <script>
+                  function convertUrl() {
+                      var inputUrl = document.getElementById("urlInput").value.trim();
+                      var urlRegex = /(https?):\/\/([a-zA-Z0-9.\-_:]+\/)qumagie\/sl\/([a-zA-Z0-9]+)/m;
+
+                      var match = inputUrl.match(urlRegex);
+                      if (match) {
+                          var code = match[3];
+                          var outputUrl = "https://share.koeff.com:444/sl/" + code;
+                          document.getElementById("outputText").value = outputUrl;
+                      } else {
+                          alert("Invalid URL format! Please enter a valid URL.");
+                      }
+                  }
+
+
+                    function copyOutputUrl() {
+                        var outputUrl = document.getElementById("outputText");
+                        outputUrl.select();
+                        document.execCommand("copy");
+                        alert("Copied to clipboard: " + outputUrl.value);
+                    }
+                </script>
+            </head>
+            <body>
+                <div class="container">
+                    <h2>URL Converter</h2>
+                    <div class="input-container">
+                        <label for="urlInput" class="subtitle">Enter URL:</label>
+                    </div>
+                    <div class="input-container">
+                        <textarea id="urlInput"></textarea>
+                        <button onclick="convertUrl()">Convert</button>
+                    </div>
+                    <div class="output-container">
+                        <input type="text" id="outputText" class="output-text" readonly>
+                        <button onclick="copyOutputUrl()" class="copy-button">
+                            <span class="copy-icon"></span> Copy
+                        </button>
+                    </div>
+                </div>
+            </body>
+            </html>
