@@ -1,17 +1,7 @@
 replicas: 1
 secret:
-    enabled: false
-extraEnvs:
--   name: ELASTIC_USERNAME
-    valueFrom:
-        secretKeyRef:
-            name: es-creds
-            key: username
--   name: ELASTIC_PASSWORD
-    valueFrom:
-        secretKeyRef:
-            name: es-creds
-            key: password
+    enabled: true
+    password: {{ requiredEnv "ES_CREDS_PASSWORD" }}
 resources:
   requests:
     cpu: "100m"
