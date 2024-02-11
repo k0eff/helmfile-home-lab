@@ -1,0 +1,39 @@
+replicas: 1
+ingress:
+    enabled: true
+    className: "nginx"
+    hosts:
+    -   host: kibana.local.koeff.com
+        paths:
+        - path: /
+    tls:
+    -   secretName: cloudflare-cluster01-dev-kibana
+        hosts:
+        - kibana.local.koeff.com
+    annotations:
+        cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "1Gi"
+
+kibanaConfig:
+    kibana.yml: |
+        server.host: "0.0.0.0"
+        server.shutdownTimeout: "5s"
+        elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+        elasticsearch.ssl.verificationMode: none
+        monitoring.ui.container.elasticsearch.enabled: true
+
+extraEnvs:
+    -   name: ELASTICSEARCH_USERNAME
+        valueFrom: 
+            secretKeyRef: 
+                name: es-creds
+                key: username
+    -   name: ELASTICSEARCH_PASSWORD
+        valueFrom: 
+            secretKeyRef: 
+                name: es-creds
+                key: password

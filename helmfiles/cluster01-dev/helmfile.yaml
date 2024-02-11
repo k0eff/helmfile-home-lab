@@ -258,8 +258,17 @@ releases:
 
   - name: elasticsearch
     chart: elastic/elasticsearch
-    version: 8.5.1
+    version: 7.17.3
     installed: true
     namespace: elastic-system
     values:
     - ../../values/{{ .Environment.Name }}/elasticsearch.yaml.gotmpl
+
+  - name: kibana
+    chart: elastic/kibana
+    version: 7.17.3
+    installed: true
+    force: true
+    namespace: elastic-system
+    values:
+    - ../../values/{{ .Environment.Name }}/kibana.yaml.gotmpl
