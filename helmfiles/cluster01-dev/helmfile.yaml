@@ -180,6 +180,14 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/nginx-url-converter-static-site.yaml.gotmpl
 
+  - name: nginx-url-converter-overridden-http
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/{{ .Environment.Name }}/nginx-url-converter-overridden-http.yaml.gotmpl
+
+
 
   - name: nginx-url-converter
     chart: bitnami/nginx
