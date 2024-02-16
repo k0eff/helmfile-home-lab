@@ -16,3 +16,11 @@ ingress:
         - shareurl.koeff.com
     annotations:
         cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+
+extraVolumes:
+    - name: main-conf-volume
+      configMap:
+        name: nginx-url-converter-overridden-http
+extraVolumeMounts:
+    - name: main-conf-volume
+      mountPath: /opt/bitnami/nginx/conf
