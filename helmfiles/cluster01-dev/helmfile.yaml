@@ -30,7 +30,8 @@ repositories:
     url: https://cloudnativeapp.github.io/charts/curated/
   - name: metrics-server
     url: https://kubernetes-sigs.github.io/metrics-server
-
+  - name: cetic
+    url: https://cetic.github.io/helm-charts
 
 ---
 
@@ -271,6 +272,21 @@ releases:
     namespace: elastic-system
     values:
     - ../../values/{{ .Environment.Name }}/elasticsearch.yaml.gotmpl
+
+  - name: elastic-indexes-ensure
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: elastic-system
+    labels:
+      reinstall: everytime
+      target: indexes
+    values:
+    - ../../values/{{ .Environment.Name }}/elastic-indexes-ensure-job.yaml.gotmpl
+    hooks:
+    - events: ["prepare"]
+      showlogs: true
+      command: "helmfile"
+      args: ["-e", "{{ .Environment.Name }}", "destroy", "-l", "reinstall=everytime", "-l", "target=indexes", "-f", "helmfile.yaml", "--skip-charts"] # ensure fresh every time
 
   - name: kibana
     chart: elastic/kibana
