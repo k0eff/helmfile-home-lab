@@ -1,0 +1,23 @@
+templates:
+- |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+        name: elastic-indexes-create-job-job
+    spec:
+        template:
+            spec:
+                containers:
+                -   image: "curlimages/curl:latest"
+                    imagePullPolicy: IfNotPresent
+                    name: elastic-indexes-create-job-job
+                    command: ["curl", 
+                        "-XPUT", 
+                        "-H", "Content-Type: application/json", 
+                        "-d", "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\": 0}}", 
+                        "http://elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200/{{ .Environment.Name }}-logs-shareurl",
+                        "-v"
+                        ]
+                restartPolicy: Never
+        backoffLimit: 1
+
