@@ -14,7 +14,7 @@ templates:
                     command: ["curl", 
                         "-XPUT", 
                         "-H", "Content-Type: application/json", 
-                        "-d", "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\": 0}}", 
+                        "-d", "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0},\"mappings\":{\"properties\":{\"time_local\":{\"type\":\"date\"},\"remote_addr\":{\"type\":\"ip\"},\"remote_user\":{\"type\":\"text\"},\"request\":{\"type\":\"text\"},\"status\":{\"type\":\"integer\"},\"body_bytes_sent\":{\"type\":\"unsigned_long\"},\"request_time\":{\"type\":\"float\"},\"http_referrer\":{\"type\":\"text\"},\"http_user_agent\":{\"type\":\"text\"}}}}", 
                         "http://elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200/{{ .Environment.Name }}-logs-shareurl",
                         "-v"
                         ]
