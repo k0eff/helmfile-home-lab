@@ -1,0 +1,35 @@
+daemonset:
+    enabled: true
+    extraEnvs:
+    -   name: "ELASTICSEARCH_USERNAME"
+        valueFrom:
+            secretKeyRef:
+                name: es-creds
+                key: username
+    -   name: "ELASTICSEARCH_PASSWORD"
+        valueFrom:
+            secretKeyRef:
+                name: es-creds
+                key: password
+    filebeatConfig:
+        filebeat.yml: |
+            filebeat.inputs:
+            -   type: container
+                paths: 
+                -   /var/log/containers/nginx-url-converter*.log
+                processors:
+                -   add_kubernetes_metadata:
+                        host: ${NODE_NAME}
+                        matchers:
+                        -   logs_path:
+                                logs_path: "/var/log/containers/"
+            output.elasticsearch:
+                hosts: ['elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200']
+                username: '${ELASTICSEARCH_USERNAME}'
+                password: '${ELASTICSEARCH_PASSWORD}'
+#                protocol: https
+#                ssl.verification_mode: none
+    resources:
+        requests:
+            cpu: "20m"
+            memory: "100Mi"
