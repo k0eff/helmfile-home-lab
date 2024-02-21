@@ -296,3 +296,11 @@ releases:
     namespace: elastic-system
     values:
     - ../../values/{{ .Environment.Name }}/kibana.yaml.gotmpl
+
+  - name: filebeat
+    chart: elastic/filebeat
+    version: 7.17.3
+    installed: true
+    namespace: elastic-system
+    values:
+    - ../../values/{{ .Environment.Name }}/filebeat.yaml.gotmpl
