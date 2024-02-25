@@ -29,3 +29,16 @@ nodeAffinity:
             values:
             - node3-dev
 
+
+
+lifecycle:
+  postStart:
+    exec:
+      command:
+        - bash
+        - -c
+        - |
+          #!/bin/bash
+          # Create ingest pipeline for nginx-url-converter
+          sleep 40
+          curl -X PUT "localhost:9200/_ingest/pipeline/nginx-url-converter-pipe" -H 'Content-Type: application/json' -d '{"description":"Json field extractor pipe from event.message","processors":[{"json":{"field":"message"}}]}'
