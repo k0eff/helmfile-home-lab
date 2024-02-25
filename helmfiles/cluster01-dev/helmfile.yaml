@@ -276,7 +276,7 @@ releases:
 
   - name: elastic-indexes-ensure
     chart: cloudnativeapp/raw
-    installed: true
+    installed: false
     namespace: elastic-system
     labels:
       reinstall: everytime
