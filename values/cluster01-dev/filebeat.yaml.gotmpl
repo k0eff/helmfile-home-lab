@@ -25,16 +25,32 @@ daemonset:
                                 logs_path: "/var/log/containers/"
             output.elasticsearch:
                 hosts: ['elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200']
+                bulk_max_size: 2500
+                bulk_max_bytes: 104857600
                 username: '${ELASTICSEARCH_USERNAME}'
                 password: '${ELASTICSEARCH_PASSWORD}'
+                index: 'filebeat-%{[agent.version]}-%{+yyyy.MM.dd}'
                 pipelines:
                 -   pipeline: "%{[fields.kubernetes.deployment.name]}"
                     mappings:
                         "nginx-url-converter": nginx-url-converter-pipe
                     default: nginx-url-converter-pipe
+            setup.template.enabled: true
+            setup.template.name: "filebeat-general-idx-tpl-7.17.3"
+            setup.template.pattern: "filebeat-*"
+            setup.template.overwrite: false
+            setup.template.fields: "./customized/fields.yml"
             setup.template.settings:
                 index.number_of_replicas: 0 # we have a cluster of only 1 node, override this to get green status
+            setup.ilm.enabled: false
     resources:
         requests:
             cpu: "20m"
             memory: "100Mi"
+    extraVolumes:
+    -   name: filebeat-fields-yaml
+        configMap:
+            name: "filebeat-fields-yaml"
+    extraVolumeMounts:
+    -   name: filebeat-fields-yaml
+        mountPath: /usr/share/filebeat/customized

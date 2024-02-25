@@ -1,0 +1,136 @@
+templates:
+-   |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+        name: filebeat-fields-yaml
+    data:
+        fields.yml: |
+            -   key: filebeat-customized
+                title: filebeat-customized
+                description: filebeat customized fields.
+                fields:
+                -   name: '@timestamp'
+                    type: date
+                -   name: 'agent.ephemeral_id'
+                    type: text
+                    ignore_above: 256
+                -   name: 'agent.hostname'
+                    type: text
+                    ignore_above: 256
+                -   name: 'agent.id'
+                    type: text
+                    ignore_above: 256
+                -   name: 'agent.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'agent.type'
+                    type: text
+                    ignore_above: 256
+                -   name: 'agent.version'
+                    type: text
+                    ignore_above: 256
+                -   name: 'container.id'
+                    type: text
+                    ignore_above: 256
+                -   name: 'container.image.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'container.runtime'
+                    type: text
+                    ignore_above: 256
+                -   name: 'ecs.version'
+                    type: text
+                    ignore_above: 256
+                -   name: 'host.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'input.type'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.container.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.deployment.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.app_kubernetes_io/instance'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.app_kubernetes_io/managed-by'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.app_kubernetes_io/name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.app_kubernetes_io/version'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.helm_sh/chart'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.labels.pod-template-hash'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.namespace'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.namespace_labels.kubernetes_io/metadata_name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.namespace_labels.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.namespace_uid'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.hostname'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.beta_kubernetes_io/arch'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.beta_kubernetes_io/os'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.kubernetes_io/arch'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.kubernetes_io/hostname'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.kubernetes_io/os'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.node-role_kubernetes_io/control-plane'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.labels.node_kubernetes_io/exclude-from-external-load-balancers'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.node.uid'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.pod.ip'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.pod.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.pod.uid'
+                    type: text
+                    ignore_above: 256
+                -   name: 'kubernetes.replicaset.name'
+                    type: text
+                    ignore_above: 256
+                -   name: 'log.file.path'
+                    type: text
+                    ignore_above: 256
+                -   name: 'log.offset'
+                    type: long
+                -   name: 'stream'
+                    type: text
+                    ignore_above: 256
