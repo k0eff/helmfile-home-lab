@@ -27,6 +27,11 @@ daemonset:
                 hosts: ['elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200']
                 username: '${ELASTICSEARCH_USERNAME}'
                 password: '${ELASTICSEARCH_PASSWORD}'
+                pipelines:
+                -   pipeline: "%{[fields.kubernetes.deployment.name]}"
+                    mappings:
+                        "nginx-url-converter": nginx-url-converter-pipe
+                    default: nginx-url-converter-pipe
             setup.template.settings:
                 index.number_of_replicas: 0 # we have a cluster of only 1 node, override this to get green status
     resources:
