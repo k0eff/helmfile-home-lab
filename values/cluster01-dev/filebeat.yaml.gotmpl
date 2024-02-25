@@ -27,8 +27,8 @@ daemonset:
                 hosts: ['elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200']
                 username: '${ELASTICSEARCH_USERNAME}'
                 password: '${ELASTICSEARCH_PASSWORD}'
-#                protocol: https
-#                ssl.verification_mode: none
+            setup.template.settings:
+                index.number_of_replicas: 0 # we have a cluster of only 1 node, override this to get green status
     resources:
         requests:
             cpu: "20m"
