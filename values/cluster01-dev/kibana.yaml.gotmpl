@@ -37,3 +37,15 @@ extraEnvs:
             secretKeyRef: 
                 name: es-creds
                 key: password
+
+lifecycle:
+    postStart:
+        exec:
+            command:
+            - bash
+            - -c
+            - |
+                #!/bin/bash
+                # Provision default kibana index pattern for filebeat (data view)
+                sleep 30
+                curl -X POST http://localhost:5601/api/saved_objects/index-pattern/filebeat -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d '{"attributes": {"title": "filebeat-*"}}'
