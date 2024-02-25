@@ -11,3 +11,21 @@ volumeClaimTemplate:
   resources:
     requests:
       storage: 10Gi
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  successThreshold: 3
+  timeoutSeconds: 5
+service:
+  enabled: true
+  publishNotReadyAddresses: true
+nodeAffinity: 
+  requiredDuringSchedulingIgnoredDuringExecution:
+    nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - node3-dev
+
