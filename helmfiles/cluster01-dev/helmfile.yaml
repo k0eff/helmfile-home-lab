@@ -298,6 +298,14 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/kibana.yaml.gotmpl
 
+  - name: filebeat-fields-yaml
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: elastic-system
+    values:
+    - ../../values/{{ .Environment.Name }}/filebeat-fields-yaml.yaml.gotmpl
+
+
   - name: filebeat
     chart: elastic/filebeat
     version: 7.17.3
