@@ -111,6 +111,7 @@ releases:
   - name: nextcloud
     chart: nextcloud/nextcloud
     version: 4.2.1
+    installed: false
     set:
       - name: image.repository
         value: k0eff/nextcloud-full
