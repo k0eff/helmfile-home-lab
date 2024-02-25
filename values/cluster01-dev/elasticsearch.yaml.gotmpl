@@ -40,5 +40,8 @@ lifecycle:
         - |
           #!/bin/bash
           # Create ingest pipeline for nginx-url-converter
-          sleep 40
+          sleep 40 #TODO: make this run after the cluster is green instead of after sleeping
           curl -X PUT "localhost:9200/_ingest/pipeline/nginx-url-converter-pipe" -H 'Content-Type: application/json' -d '{"description":"Json field extractor pipe from event.message","processors":[{"json":{"field":"message"}}]}'
+          #
+          # Ensure provisioned index: cluste01-dev-logs-shareurl
+          curl -XPUT -H 'Content-Type: application/json' -d '{"settings":{"number_of_shards":1,"number_of_replicas":0},"mappings":{"properties":{"time_local":{"type":"date"},"remote_addr":{"type":"ip"},"remote_user":{"type":"text"},"request":{"type":"text"},"status":{"type":"integer"},"body_bytes_sent":{"type":"unsigned_long"},"request_time":{"type":"float"},"http_referrer":{"type":"text"},"http_user_agent":{"type":"text"}}}}' 'http://elasticsearch-master.elastic-system.svc.cluster01-dev.local:9200/{{ .Environment.Name }}-logs-shareurl' -v
