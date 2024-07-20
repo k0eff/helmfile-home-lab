@@ -11,11 +11,11 @@ ingress:
     hostname: shareurl.koeff.com
     path: /
     tls:
-    -   secretName: cloudflare-cluster01-dev-prometheus
+    -   secretName: cloudflare-{{ .Environment.Name }}-prometheus
         hosts:
         - shareurl.koeff.com
     annotations:
-        cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+        cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
 
 extraVolumes:
     - name: main-conf-volume
