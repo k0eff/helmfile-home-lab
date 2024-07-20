@@ -308,3 +308,33 @@ releases:
     - ns-homelab-main/qnap-proxy-service
     values:
     - ../../values/common/qnap-proxy.yaml.gotmpl
+
+
+
+
+
+
+
+  - name: nginx-url-converter-static-site
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/nginx-url-converter-static-site.yaml.gotmpl
+
+  - name: nginx-url-converter-overridden-http
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/nginx-url-converter-overridden-http.yaml.gotmpl
+
+
+
+  - name: nginx-url-converter
+    chart: bitnami/nginx
+    version: 15.10.1
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/nginx-url-converter.yaml.gotmpl
