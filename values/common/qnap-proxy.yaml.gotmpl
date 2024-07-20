@@ -5,9 +5,9 @@ resources:
 -   apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
-        name: qnap-ingress-share
+        name: qnap-ingress-sl
         annotations:
-            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/sl/$1
     spec:
@@ -15,7 +15,7 @@ resources:
         tls:
         -   hosts:
             -   share.koeff.com
-            secretName: qnap-proxy-cluster01-dev-tls
+            secretName: qnap-proxy-{{ .Environment.Name }}-tls
         rules:
         -   host: share.koeff.com
             http:
@@ -34,7 +34,7 @@ resources:
     metadata:
         name: qnap-ingress-share
         annotations:
-            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/share/$1
     spec:
@@ -42,7 +42,7 @@ resources:
         tls:
         -   hosts:
             -   share.koeff.com
-            secretName: qnap-proxy-cluster01-dev-tls
+            secretName: qnap-proxy-{{ .Environment.Name }}-tls
         rules:
         -   host: share.koeff.com
             http:
@@ -61,7 +61,7 @@ resources:
     metadata:
         name: qnap-ingress-qumagie
         annotations:
-            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/$1
     spec:
@@ -69,7 +69,7 @@ resources:
         tls:
         -   hosts:
             -   share.koeff.com
-            secretName: qnap-proxy-cluster01-dev-tls
+            secretName: qnap-proxy-{{ .Environment.Name }}-tls
         rules:
         -   host: share.koeff.com
             http:
@@ -88,7 +88,7 @@ resources:
     metadata:
         name: qnap-ingress-v3menu
         annotations:
-            cert-manager.io/cluster-issuer: cloudflare-cluster01-dev
+            cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /v3_menu/$1
     spec:
@@ -96,7 +96,7 @@ resources:
         tls:
         -   hosts:
             -   share.koeff.com
-            secretName: qnap-proxy-cluster01-dev-tls
+            secretName: qnap-proxy-{{ .Environment.Name }}-tls
         rules:
         -   host: share.koeff.com
             http:

@@ -155,7 +155,7 @@ releases:
     installed: true
     namespace: ns-homelab-main
     values:
-    - ../../values/{{ .Environment.Name }}/qnap-proxy-endpoints.yaml.gotmpl
+    - ../../values/common/qnap-proxy-endpoints.yaml.gotmpl
 
   - name: qnap-proxy-service
     chart: cloudnativeapp/raw
@@ -164,7 +164,7 @@ releases:
     needs: 
     - ns-homelab-main/qnap-proxy-endpoints
     values:
-    - ../../values/{{ .Environment.Name }}/qnap-proxy-service.yaml.gotmpl
+    - ../../values/common/qnap-proxy-service.yaml.gotmpl
 
   - name: qnap-proxy
     chart: cloudnativeapp/raw
@@ -173,7 +173,7 @@ releases:
     needs: 
     - ns-homelab-main/qnap-proxy-service
     values:
-    - ../../values/{{ .Environment.Name }}/qnap-proxy.yaml.gotmpl
+    - ../../values/common/qnap-proxy.yaml.gotmpl
 
   - name: nginx-url-converter-static-site
     chart: cloudnativeapp/raw
@@ -187,7 +187,7 @@ releases:
     installed: true
     namespace: ns-homelab-main
     values:
-    - ../../values/{{ .Environment.Name }}/nginx-url-converter-overridden-http.yaml.gotmpl
+    - ../../values/common/nginx-url-converter-overridden-http.yaml.gotmpl
 
 
 

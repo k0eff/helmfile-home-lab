@@ -91,6 +91,7 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
+
   - name: nextcloud
     chart: nextcloud/nextcloud
     version: 4.2.1
@@ -106,12 +107,14 @@ releases:
     chart: csi-driver-smb/csi-driver-smb
     namespace: kube-system
     version: 1.12.0
+    installed: false
 
 
 # SMB1
   - name: secret-smb1
     chart: k0eff-home-lab-charts/helperChart
     namespace: ns-homelab-main
+    installed: false
     set:
       - name: "helperchart.secret.enabled"
         value: true
@@ -128,7 +131,7 @@ releases:
 
   - name: storage-class-smb1
     chart: k0eff-home-lab-charts/helperChart
-    installed: true
+    installed: false
     set:
       - name: "helperchart.storageClass.enabled"
         value: true
@@ -162,7 +165,7 @@ releases:
 
   - name: photoprism
     chart: k8s-at-home/photoprism
-    installed: true
+    installed: false
     namespace: ns-homelab-main
     version: 5.0.0
     values:
@@ -177,6 +180,7 @@ releases:
   - name: secret-smb2
     chart: k0eff-home-lab-charts/helperChart
     namespace: ns-homelab-main
+    installed: false
     set:
       - name: "helperchart.secret.enabled"
         value: true
@@ -193,7 +197,7 @@ releases:
 
   - name: storage-class-smb2
     chart: k0eff-home-lab-charts/helperChart
-    installed: true
+    installed: false
     set:
       - name: "helperchart.storageClass.enabled"
         value: true
@@ -227,7 +231,7 @@ releases:
 
   - name: photoprism2
     chart: k8s-at-home/photoprism
-    installed: true
+    installed: false
     namespace: ns-homelab-main
     version: 5.0.0
     values:
@@ -235,3 +239,72 @@ releases:
     needs:
     - kube-system/csi-driver-smb
     - ns-homelab-main/secret-smb2
+
+
+
+  - name: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.13.2
+    installed: true
+    namespace: cert-manager
+    set:
+    - name: prometheus.enabled
+      value: false
+    - name: installCRDs
+      value: true
+  - name: cert-manager-tokens
+    chart: k0eff-home-lab-charts/helperChart
+    installed: true
+    namespace: cert-manager
+    needs:
+    - cert-manager/cert-manager
+    set:
+      - name: "helperchart.secret.enabled"
+        value: true
+      - name: "helperchart.secret.name"
+        value: cert-manager-cloudflare-token-secret
+      - name: "helperchart.secret.namespace"
+        value: cert-manager
+      - name: "helperchart.secret.data.token"
+        value: "{{ requiredEnv "CERT_MANAGER_CLOUDFLARE_TOKEN" }}"
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+
+  - name: cert-manager-issuers
+    chart: adfinis/cert-manager-issuers
+    version: 0.2.5
+    installed: true
+    namespace: cert-manager
+    needs:
+    - cert-manager/cert-manager-tokens
+    - cert-manager/cert-manager
+    values:
+    - ../../values/{{ .Environment.Name }}/cert-manager-issuers.yaml.gotmpl
+
+
+
+
+  - name: qnap-proxy-endpoints
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/qnap-proxy-endpoints.yaml.gotmpl
+
+  - name: qnap-proxy-service
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs: 
+    - ns-homelab-main/qnap-proxy-endpoints
+    values:
+    - ../../values/common/qnap-proxy-service.yaml.gotmpl
+
+  - name: qnap-proxy
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs: 
+    - ns-homelab-main/qnap-proxy-service
+    values:
+    - ../../values/common/qnap-proxy.yaml.gotmpl
