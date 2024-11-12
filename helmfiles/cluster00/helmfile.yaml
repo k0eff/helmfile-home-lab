@@ -338,3 +338,12 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/common/nginx-url-converter.yaml.gotmpl
+
+
+  - name: qbittorrent
+    chart: k8s-at-home/qbittorrent
+    version: 13.5.2
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl
