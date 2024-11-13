@@ -1,11 +1,8 @@
 ingress:
   main:
     enabled: true
-    ingressClassName: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: cloudflare-cluster00
     hosts:
-      - host: qbittorrent.koeff.com
+      - host: qbittorrent.local.koeff.com
         paths:
           - path: /
             pathType: Prefix
@@ -15,4 +12,4 @@ ingress:
     tls:
       - secretName: cloudflare-cluster00-qbittorrent
         hosts:
-          - qbittorrent.koeff.com
+          - qbittorrent.local.koeff.com
