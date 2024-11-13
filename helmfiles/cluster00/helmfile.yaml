@@ -347,3 +347,12 @@ releases:
     namespace: media
     values:
     - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl
+
+  - name: prowlarr
+    chart: k8s-at-home/prowlarr
+    version: 4.5.2 
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/prowlarr.yaml.gotmpl
+
