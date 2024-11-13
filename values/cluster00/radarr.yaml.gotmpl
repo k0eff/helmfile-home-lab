@@ -1,0 +1,18 @@
+ingress:
+  main:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster00
+    hosts:
+      - host: radarr.koeff.com
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              name: radarr
+              port: 7878
+    tls:
+      - secretName: cloudflare-cluster00-radarr
+        hosts:
+          - radarr.koeff.com
