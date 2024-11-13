@@ -5,7 +5,7 @@ ingress:
     annotations:
       cert-manager.io/cluster-issuer: cloudflare-cluster00
     hosts:
-      - host: prowlarr.koeff.com
+      - host: prowlarr.local.koeff.com
         paths:
           - path: /
             pathType: Prefix
@@ -15,4 +15,4 @@ ingress:
     tls:
       - secretName: cloudflare-cluster00-prowlarr
         hosts:
-          - prowlarr.koeff.com
+          - prowlarr.local.koeff.com

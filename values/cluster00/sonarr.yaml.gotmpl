@@ -5,7 +5,7 @@ ingress:
     annotations:
       cert-manager.io/cluster-issuer: cloudflare-cluster00
     hosts:
-      - host: sonarr.koeff.com
+      - host: sonarr.local.koeff.com
         paths:
           - path: /
             pathType: Prefix
@@ -15,4 +15,6 @@ ingress:
     tls:
       - secretName: cloudflare-cluster00-sonarr
         hosts:
-          - sonarr.koeff.com
+          - sonarr.local.koeff.com
+
+# TODO: mount smb backup dir in /config/Backups/ 

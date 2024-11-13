@@ -5,7 +5,7 @@ ingress:
     annotations:
       cert-manager.io/cluster-issuer: cloudflare-cluster00
     hosts:
-      - host: radarr.koeff.com
+      - host: radarr.local.koeff.com
         paths:
           - path: /
             pathType: Prefix
@@ -15,4 +15,4 @@ ingress:
     tls:
       - secretName: cloudflare-cluster00-radarr
         hosts:
-          - radarr.koeff.com
+          - radarr.local.koeff.com
