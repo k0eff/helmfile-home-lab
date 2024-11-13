@@ -364,3 +364,11 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/radarr.yaml.gotmpl
 
+
+  - name: sonarr
+    chart: k8s-at-home/sonarr
+    version: 16.3.2
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/sonarr.yaml.gotmpl
