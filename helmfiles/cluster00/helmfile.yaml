@@ -107,7 +107,7 @@ releases:
     chart: csi-driver-smb/csi-driver-smb
     namespace: kube-system
     version: 1.12.0
-    installed: false
+    installed: true
 
 
 # SMB1
@@ -340,13 +340,6 @@ releases:
     - ../../values/common/nginx-url-converter.yaml.gotmpl
 
 
-  - name: qbittorrent
-    chart: k8s-at-home/qbittorrent
-    version: 13.5.2
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl
 
   - name: prowlarr
     chart: k8s-at-home/prowlarr
@@ -372,3 +365,78 @@ releases:
     namespace: media
     values:
     - ../../values/{{ .Environment.Name }}/sonarr.yaml.gotmpl
+
+
+  - name: overseerr
+    chart: k8s-at-home/overseerr
+    version: 5.4.2
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/overseerr.yaml.gotmpl
+
+
+
+
+  - name: secret-smb-nas
+    chart: k0eff-home-lab-charts/helperChart
+    namespace: ns-homelab-main
+    installed: true
+    set:
+      - name: "helperchart.secret.enabled"
+        value: true
+      - name: "helperchart.secret.name"
+        value: secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}
+      - name: "helperchart.secret.namespace"
+        value: ns-homelab-main
+      - name: "helperchart.secret.data.username"
+        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_USERNAME" }}"
+      - name: "helperchart.secret.data.password"
+        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_PASSWORD" }}"
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+
+
+  - name: storageclass-smb-nas-multimedia
+    chart: k0eff-home-lab-charts/helperChart
+    namespace: media
+    installed: true
+    set:
+      - name: "helperchart.storageClass.enabled"
+        value: true
+      - name: "helperchart.storageClass.name"
+        value: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
+      - name: "helperchart.storageClass.provisioner"
+        value: "smb.csi.k8s.io"
+      - name: "helperchart.storageClass.parameters.source"
+        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_ADDRESS_MULTIMEDIA" }}"
+      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
+        value: "secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}"
+      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
+        value: "ns-homelab-main"
+      - name: "helperchart.storageClass.reclaimPolicy"
+        value: Delete
+      - name: "helperchart.storageClass.volumeBindingMode"
+        value: Immediate
+      - name: "helperchart.storageClass.mountOptions[0]"
+        value: dir_mode=0777
+      - name: "helperchart.storageClass.mountOptions[1]"
+        value: file_mode=0777
+      - name: "helperchart.storageClass.mountOptions[2]"
+        value: uid=0
+      - name: "helperchart.storageClass.mountOptions[3]"
+        value: gid=0
+    values:
+    - ../../templates/helperChart/values.yaml.gotmpl
+    needs:
+    - ns-metallb/metallb-main
+    - kube-system/csi-driver-smb
+
+
+  - name: qbittorrent
+    chart: k8s-at-home/qbittorrent
+    version: 13.5.2
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl

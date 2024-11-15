@@ -3,16 +3,27 @@ ingress:
     enabled: true
     ingressClassName: nginx
     annotations:
-      cert-manager.io/cluster-issuer: cloudflare-cluster00
+        cert-manager.io/cluster-issuer: cloudflare-cluster00
     hosts:
-      - host: qbittorrent.local.koeff.com
+    -   host: qbittorrent.local.koeff.com
         paths:
-          - path: /
+        -   path: /
             pathType: Prefix
             service:
-              name: qbittorrent
-              port: 8080
+            name: qbittorrent
+            port: 8080
     tls:
-      - secretName: cloudflare-cluster00-qbittorrent
+    -   secretName: cloudflare-cluster00-qbittorrent
         hosts:
-          - qbittorrent.local.koeff.com
+        -   qbittorrent.local.koeff.com
+
+persistence:
+    media:
+        enabled: true
+        storageClass: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
+        accessMode: ReadWriteMany
+        mountPath: /downloads
+        size: 500Gi
+
+env:
+    TZ: EEST
