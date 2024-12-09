@@ -18,6 +18,11 @@ ingress:
         -   qbittorrent.local.koeff.com
 
 persistence:
+    config:
+        enabled: true
+        storageClass: {{ .Environment.Name }}-storageclass-datastore1
+        accessMode: ReadWriteOnce
+        size: 100Mi
     media:
         enabled: true
         storageClass: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
