@@ -28,6 +28,7 @@ helmDefaults:
 releases:
   - name: storage-class-default
     chart: k0eff-home-lab-charts/helperChart
+    installed: false
     set:
       - name: "helperchart.storageClass.enabled"
         value: true
@@ -45,17 +46,7 @@ releases:
         value: "csi.vsphere.vmware.com"
     values:
     - ../../templates/helperChart/values.yaml.gotmpl
-  - name: organizr-main
-    namespace: ns-homelab-main
-    chart: k8s-at-home/organizr
-    values:
-    - ../../templates/organizr/values.yaml.gotmpl
-    set:
-    - name: persistence.config.size
-      value: 1.05Gi
-    - name: persistence.config.enabled
-      value: true
-    installed: true
+
   - name: namespace-metallb
     chart: k0eff-home-lab-charts/helperChart
     set:
@@ -91,155 +82,6 @@ releases:
     namespace: ns-homelab-main
     values:
     - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
-
-  - name: nextcloud
-    chart: nextcloud/nextcloud
-    version: 4.2.1
-    installed: false
-    values:
-    - ../../values/{{ .Environment.Name }}/nextcloud.yaml.gotmpl
-    needs:
-    - ns-metallb/metallb-main
-
-
-# SMB
-  - name: csi-driver-smb
-    chart: csi-driver-smb/csi-driver-smb
-    namespace: kube-system
-    version: 1.12.0
-    installed: true
-
-
-# SMB1
-  - name: secret-smb1
-    chart: k0eff-home-lab-charts/helperChart
-    namespace: ns-homelab-main
-    installed: false
-    set:
-      - name: "helperchart.secret.enabled"
-        value: true
-      - name: "helperchart.secret.name"
-        value: secret-smb-{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_SECRET_SUFFIX" }}
-      - name: "helperchart.secret.namespace"
-        value: ns-homelab-main
-      - name: "helperchart.secret.data.username"
-        value: "{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_USERNAME" }}"
-      - name: "helperchart.secret.data.password"
-        value: "{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_PASSWORD" }}"
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
-
-  - name: storage-class-smb1
-    chart: k0eff-home-lab-charts/helperChart
-    installed: false
-    set:
-      - name: "helperchart.storageClass.enabled"
-        value: true
-      - name: "helperchart.storageClass.name"
-        value: {{ .Environment.Name }}-storageclass-smb1
-      - name: "helperchart.storageClass.provisioner"
-        value: "smb.csi.k8s.io"
-      - name: "helperchart.storageClass.parameters.source"
-        value: "{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_ADDRESS" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
-        value: "secret-smb-{{ requiredEnv "PHOTOPRISM1_SMB_SHARE_SECRET_SUFFIX" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
-        value: "ns-homelab-main"
-      - name: "helperchart.storageClass.reclaimPolicy"
-        value: Delete
-      - name: "helperchart.storageClass.volumeBindingMode"
-        value: Immediate
-      - name: "helperchart.storageClass.mountOptions[0]"
-        value: dir_mode=0555
-      - name: "helperchart.storageClass.mountOptions[1]"
-        value: file_mode=0555
-      - name: "helperchart.storageClass.mountOptions[2]"
-        value: uid=0
-      - name: "helperchart.storageClass.mountOptions[3]"
-        value: gid=0
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
-    needs:
-    - ns-metallb/metallb-main
-
-
-  - name: photoprism
-    chart: k8s-at-home/photoprism
-    installed: false
-    namespace: ns-homelab-main
-    version: 5.0.0
-    values:
-    - ../../values/{{ .Environment.Name }}/photoprism1.yaml.gotmpl
-    needs:
-    - kube-system/csi-driver-smb
-    - ns-homelab-main/secret-smb1
-
-
-# SMB 2
-
-  - name: secret-smb2
-    chart: k0eff-home-lab-charts/helperChart
-    namespace: ns-homelab-main
-    installed: false
-    set:
-      - name: "helperchart.secret.enabled"
-        value: true
-      - name: "helperchart.secret.name"
-        value: secret-smb-{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_SECRET_SUFFIX" }}
-      - name: "helperchart.secret.namespace"
-        value: ns-homelab-main
-      - name: "helperchart.secret.data.username"
-        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_USERNAME" }}"
-      - name: "helperchart.secret.data.password"
-        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_PASSWORD" }}"
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
-
-  - name: storage-class-smb2
-    chart: k0eff-home-lab-charts/helperChart
-    installed: false
-    set:
-      - name: "helperchart.storageClass.enabled"
-        value: true
-      - name: "helperchart.storageClass.name"
-        value: {{ .Environment.Name }}-storageclass-smb2
-      - name: "helperchart.storageClass.provisioner"
-        value: "smb.csi.k8s.io"
-      - name: "helperchart.storageClass.parameters.source"
-        value: "{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_ADDRESS" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
-        value: "secret-smb-{{ requiredEnv "PHOTOPRISM2_SMB_SHARE_SECRET_SUFFIX" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
-        value: "ns-homelab-main"
-      - name: "helperchart.storageClass.reclaimPolicy"
-        value: Delete
-      - name: "helperchart.storageClass.volumeBindingMode"
-        value: Immediate
-      - name: "helperchart.storageClass.mountOptions[0]"
-        value: dir_mode=0444
-      - name: "helperchart.storageClass.mountOptions[1]"
-        value: file_mode=0444
-      - name: "helperchart.storageClass.mountOptions[2]"
-        value: uid=0
-      - name: "helperchart.storageClass.mountOptions[3]"
-        value: gid=0
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
-    needs:
-    - ns-metallb/metallb-main
-
-
-  - name: photoprism2
-    chart: k8s-at-home/photoprism
-    installed: false
-    namespace: ns-homelab-main
-    version: 5.0.0
-    values:
-    - ../../values/{{ .Environment.Name }}/photoprism2.yaml.gotmpl
-    needs:
-    - kube-system/csi-driver-smb
-    - ns-homelab-main/secret-smb2
-
 
 
   - name: cert-manager
@@ -337,106 +179,108 @@ releases:
     installed: true
     namespace: ns-homelab-main
     values:
-    - ../../values/common/nginx-url-converter.yaml.gotmpl
-
-
-
-  - name: prowlarr
-    chart: k8s-at-home/prowlarr
-    version: 4.5.2 
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/prowlarr.yaml.gotmpl
-
-  - name: radarr
-    chart: k8s-at-home/radarr
-    version: 16.3.2 
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/radarr.yaml.gotmpl
-
-
-  - name: sonarr
-    chart: k8s-at-home/sonarr
-    version: 16.3.2
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/sonarr.yaml.gotmpl
-
-
-  - name: overseerr
-    chart: k8s-at-home/overseerr
-    version: 5.4.2
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/overseerr.yaml.gotmpl
+    - "../../values/common/nginx-url-converter.yaml.gotmpl"
 
 
 
 
-  - name: secret-smb-nas
-    chart: k0eff-home-lab-charts/helperChart
-    namespace: ns-homelab-main
-    installed: true
-    set:
-      - name: "helperchart.secret.enabled"
-        value: true
-      - name: "helperchart.secret.name"
-        value: secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}
-      - name: "helperchart.secret.namespace"
-        value: ns-homelab-main
-      - name: "helperchart.secret.data.username"
-        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_USERNAME" }}"
-      - name: "helperchart.secret.data.password"
-        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_PASSWORD" }}"
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
+
+  # - name: prowlarr
+  #   chart: k8s-at-home/prowlarr
+  #   version: 4.5.2 
+  #   installed: true
+  #   namespace: media
+  #   values:
+  #   - ../../values/{{ .Environment.Name }}/prowlarr.yaml.gotmpl
+
+  # - name: radarr
+  #   chart: k8s-at-home/radarr
+  #   version: 16.3.2 
+  #   installed: true
+  #   namespace: media
+  #   values:
+  #   - ../../values/{{ .Environment.Name }}/radarr.yaml.gotmpl
 
 
-  - name: storageclass-smb-nas-multimedia
-    chart: k0eff-home-lab-charts/helperChart
-    namespace: media
-    installed: true
-    set:
-      - name: "helperchart.storageClass.enabled"
-        value: true
-      - name: "helperchart.storageClass.name"
-        value: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
-      - name: "helperchart.storageClass.provisioner"
-        value: "smb.csi.k8s.io"
-      - name: "helperchart.storageClass.parameters.source"
-        value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_ADDRESS_MULTIMEDIA" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
-        value: "secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}"
-      - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
-        value: "ns-homelab-main"
-      - name: "helperchart.storageClass.reclaimPolicy"
-        value: Delete
-      - name: "helperchart.storageClass.volumeBindingMode"
-        value: Immediate
-      - name: "helperchart.storageClass.mountOptions[0]"
-        value: dir_mode=0777
-      - name: "helperchart.storageClass.mountOptions[1]"
-        value: file_mode=0777
-      - name: "helperchart.storageClass.mountOptions[2]"
-        value: uid=0
-      - name: "helperchart.storageClass.mountOptions[3]"
-        value: gid=0
-    values:
-    - ../../templates/helperChart/values.yaml.gotmpl
-    needs:
-    - ns-metallb/metallb-main
-    - kube-system/csi-driver-smb
+  # - name: sonarr
+  #   chart: k8s-at-home/sonarr
+  #   version: 16.3.2
+  #   installed: true
+  #   namespace: media
+  #   values:
+  #   - ../../values/{{ .Environment.Name }}/sonarr.yaml.gotmpl
 
 
-  - name: qbittorrent
-    chart: k8s-at-home/qbittorrent
-    version: 13.5.2
-    installed: true
-    namespace: media
-    values:
-    - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl
+  # - name: overseerr
+  #   chart: k8s-at-home/overseerr
+  #   version: 5.4.2
+  #   installed: true
+  #   namespace: media
+  #   values:
+  #   - ../../values/{{ .Environment.Name }}/overseerr.yaml.gotmpl
+
+
+
+
+  # - name: secret-smb-nas
+  #   chart: k0eff-home-lab-charts/helperChart
+  #   namespace: ns-homelab-main
+  #   installed: true
+  #   set:
+  #     - name: "helperchart.secret.enabled"
+  #       value: true
+  #     - name: "helperchart.secret.name"
+  #       value: secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}
+  #     - name: "helperchart.secret.namespace"
+  #       value: ns-homelab-main
+  #     - name: "helperchart.secret.data.username"
+  #       value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_USERNAME" }}"
+  #     - name: "helperchart.secret.data.password"
+  #       value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_PASSWORD" }}"
+  #   values:
+  #   - ../../templates/helperChart/values.yaml.gotmpl
+
+
+  # - name: storageclass-smb-nas-multimedia
+  #   chart: k0eff-home-lab-charts/helperChart
+  #   namespace: media
+  #   installed: true
+  #   set:
+  #     - name: "helperchart.storageClass.enabled"
+  #       value: true
+  #     - name: "helperchart.storageClass.name"
+  #       value: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
+  #     - name: "helperchart.storageClass.provisioner"
+  #       value: "smb.csi.k8s.io"
+  #     - name: "helperchart.storageClass.parameters.source"
+  #       value: "{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_ADDRESS_MULTIMEDIA" }}"
+  #     - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-name"
+  #       value: "secret-smb-{{ requiredEnv "QBITTORRENT_SMB_SHARE_SECRET_SUFFIX" }}"
+  #     - name: "helperchart.storageClass.parameters.csi\\.storage\\.k8s\\.io/node-stage-secret-namespace"
+  #       value: "ns-homelab-main"
+  #     - name: "helperchart.storageClass.reclaimPolicy"
+  #       value: Delete
+  #     - name: "helperchart.storageClass.volumeBindingMode"
+  #       value: Immediate
+  #     - name: "helperchart.storageClass.mountOptions[0]"
+  #       value: dir_mode=0777
+  #     - name: "helperchart.storageClass.mountOptions[1]"
+  #       value: file_mode=0777
+  #     - name: "helperchart.storageClass.mountOptions[2]"
+  #       value: uid=0
+  #     - name: "helperchart.storageClass.mountOptions[3]"
+  #       value: gid=0
+  #   values:
+  #   - ../../templates/helperChart/values.yaml.gotmpl
+  #   needs:
+  #   - ns-metallb/metallb-main
+  #   - kube-system/csi-driver-smb
+
+
+  # - name: qbittorrent
+    # chart: k8s-at-home/qbittorrent
+    # version: 13.5.2
+    # installed: true
+    # namespace: media
+    # values:
+    # - ../../values/{{ .Environment.Name }}/qbittorrent.yaml.gotmpl
