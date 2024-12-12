@@ -10,6 +10,16 @@ repositories:
     url: https://metallb.github.io/metallb/
   - name: csi-driver-smb
     url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts/
+  - name: cloudnativeapp
+    url: https://cloudnativeapp.github.io/charts/curated/
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: adfinis
+    url: https://charts.adfinis.com
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
 
 ---
 environments:
