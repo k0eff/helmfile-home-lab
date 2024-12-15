@@ -17,4 +17,16 @@ ingress:
         hosts:
           - sonarr.local.koeff.com
 
-# TODO: mount smb backup dir in /config/Backups/ 
+
+persistence:
+  config:
+    enabled: true
+    storageClass: "{{ .Environment.Name }}-storageclass-nfs-nas-multimedia"
+    size: "100Mi"
+    retain: true
+    accessMode: ReadWriteMany
+
+securityContext:
+  runAsUser: 0
+  runAsGroup: 0
+
