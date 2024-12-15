@@ -313,13 +313,13 @@ releases:
     values:
     - ../../values/{{ .Environment.Name }}/prowlarr.yaml.gotmpl
 
-  # - name: radarr
-  #   chart: k8s-at-home/radarr
-  #   version: 16.3.2 
-  #   installed: true
-  #   namespace: media
-  #   values:
-  #   - ../../values/{{ .Environment.Name }}/radarr.yaml.gotmpl
+  - name: radarr
+    chart: k8s-at-home/radarr
+    version: 16.3.2 
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/radarr.yaml.gotmpl
 
 
   # - name: sonarr
