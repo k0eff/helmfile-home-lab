@@ -16,3 +16,15 @@ ingress:
       - secretName: cloudflare-cluster00-overseerr
         hosts:
           - overseerr.local.koeff.com
+
+persistence:
+  config:
+    enabled: true
+    storageClass: "{{ .Environment.Name }}-storageclass-nfs-nas-multimedia"
+    size: "100Mi"
+    retain: true
+    accessMode: ReadWriteMany
+
+securityContext:
+  runAsUser: 0
+  runAsGroup: 0
