@@ -331,13 +331,13 @@ releases:
     - ../../values/{{ .Environment.Name }}/sonarr.yaml.gotmpl
 
 
-  # - name: overseerr
-  #   chart: k8s-at-home/overseerr
-  #   version: 5.4.2
-  #   installed: true
-  #   namespace: media
-  #   values:
-  #   - ../../values/{{ .Environment.Name }}/overseerr.yaml.gotmpl
+  - name: overseerr
+    chart: k8s-at-home/overseerr
+    version: 5.4.2
+    installed: true
+    namespace: media
+    values:
+    - ../../values/{{ .Environment.Name }}/overseerr.yaml.gotmpl
 
 
 
