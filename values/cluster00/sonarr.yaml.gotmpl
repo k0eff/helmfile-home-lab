@@ -25,6 +25,12 @@ persistence:
     size: "100Mi"
     retain: true
     accessMode: ReadWriteMany
+  data:
+      enabled: true
+      storageClass: {{ .Environment.Name }}-storageclass-smb-nas-multimedia-root
+      accessMode: ReadWriteMany
+      mountPath: /data
+      size: 600Gi
 
 securityContext:
   runAsUser: 0

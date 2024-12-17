@@ -23,6 +23,7 @@ persistence:
     storageClass: "{{ .Environment.Name }}-storageclass-nfs-nas-multimedia"
     size: "100Mi"
     retain: true
+    mountPath: /config
     accessMode: ReadWriteMany
 
 securityContext:

@@ -20,15 +20,20 @@ ingress:
 persistence:
     config:
         enabled: true
-        storageClass: {{ .Environment.Name }}-storageclass-datastore1
-        accessMode: ReadWriteOnce
+        storageClass: {{ .Environment.Name }}-storageclass-nfs-nas-multimedia
+        accessMode: ReadWriteMany
         size: 100Mi
-    media:
+    downloads:
         enabled: true
-        storageClass: {{ .Environment.Name }}-storageclass-smb-nas-multimedia
+        storageClass: {{ .Environment.Name }}-storageclass-smb-nas-multimedia-downloads
         accessMode: ReadWriteMany
         mountPath: /downloads
-        size: 500Gi
+        size: 100Gi
 
 env:
     TZ: EEST
+
+
+image:
+  repository: linuxserver/qbittorrent
+  tag: latest
