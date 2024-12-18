@@ -39,3 +39,34 @@ securityContext:
 image:
   repository: linuxserver/radarr
   tag: latest
+
+
+probes:
+  liveness:
+    enabled: true
+    custom: true
+    spec:
+      exec: null
+      httpGet:
+        path: /
+        port: 7878
+      initialDelaySeconds: 30
+      periodSeconds: 20
+  readiness:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /
+        port: 7878
+      initialDelaySeconds: 15
+      periodSeconds: 10
+  startup:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /
+        port: 7878
+      initialDelaySeconds: 60
+      periodSeconds: 10
