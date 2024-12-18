@@ -40,3 +40,34 @@ securityContext:
 image:
   repository: linuxserver/sonarr
   tag: latest
+
+
+probes:
+  liveness:
+    enabled: true
+    custom: true
+    spec:
+      exec: null
+      httpGet:
+        path: /
+        port: 8989
+      initialDelaySeconds: 30
+      periodSeconds: 20
+  readiness:
+    custom: true
+    enabled: true
+    spec:
+      httpGet:
+        path: /
+        port: 8989
+      initialDelaySeconds: 15
+      periodSeconds: 10
+  startup:
+    custom: true
+    enabled: true
+    spec:
+      httpGet:
+        path: /
+        port: 8989
+      initialDelaySeconds: 60
+      periodSeconds: 10
