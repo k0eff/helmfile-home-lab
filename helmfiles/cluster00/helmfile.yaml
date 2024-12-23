@@ -22,8 +22,9 @@ repositories:
     url: https://charts.bitnami.com/bitnami
   - name: csi-driver-nfs
     url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
-
-
+  - name: sergelogvinov
+    url: oci://ghcr.io/sergelogvinov/charts/
+    oci: true
 
 
 ---
@@ -376,6 +377,22 @@ releases:
 
 
 
+  - name: proxmox-csi-plugin
+    namespace: csi-proxmox
+    chart: oci://ghcr.io/sergelogvinov/charts/proxmox-csi-plugin
+    version: 0.2.14
+    values:
+    - ../../values/{{ .Environment.Name }}/proxmox-csi-plugin.yaml.gotmpl
+    hooks:
+      - events: ["pre-apply"]
+        showlogs: true
+        command: bash
+        args:
+          - -c
+          - |
+            kubectl label nodes node1 topology.kubernetes.io/region=Region-1 topology.kubernetes.io/zone=proxmox-node1 --overwrite
+            kubectl label nodes node2 topology.kubernetes.io/region=Region-1 topology.kubernetes.io/zone=proxmox-node2 --overwrite
+            kubectl label nodes node3 topology.kubernetes.io/region=Region-1 topology.kubernetes.io/zone=proxmox-node3 --overwrite
 
   - name: prowlarr
     chart: k8s-at-home/prowlarr

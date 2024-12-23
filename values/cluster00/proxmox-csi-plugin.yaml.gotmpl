@@ -1,0 +1,13 @@
+config:
+  clusters:
+  - url: https://{{ requiredEnv "CSI_PROXMOX_ADDRESS" }}:8006/api2/json
+    insecure: false
+    token_id: "{{ requiredEnv "CSI_PROXMOX_TOKEN_ID" }}"
+    token_secret: "{{ requiredEnv "CSI_PROXMOX_TOKEN_SECRET" }}"
+    region: Region-1
+
+storageClass:
+- name: proxmox-data-xfs
+  storage: data
+  reclaimPolicy: Delete
+  fstype: xfs
