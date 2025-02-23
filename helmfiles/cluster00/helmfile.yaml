@@ -147,6 +147,12 @@ releases:
     values:
     - ../../values/common/qnap-proxy.yaml.gotmpl
 
+  - name: n8n-proxy
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/n8n-proxy-service.yaml.gotmpl
 
 
 
@@ -176,7 +182,6 @@ releases:
     namespace: ns-homelab-main
     values:
     - "../../values/common/nginx-url-converter.yaml.gotmpl"
-
 
 
 
