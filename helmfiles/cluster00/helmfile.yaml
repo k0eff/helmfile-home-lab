@@ -154,6 +154,13 @@ releases:
     values:
     - ../../values/common/n8n-proxy-service.yaml.gotmpl
 
+  - name: overseerr-proxy
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/overseerr-proxy-service.yaml.gotmpl
+
 
 
 

@@ -1,0 +1,50 @@
+resources:
+  # Ingress resource for overseerr.koeff.com using HTTPS
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: overseerr-ingress
+      annotations:
+        cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        # Optionally add a rewrite rule if your backend requires it:
+        # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    spec:
+      ingressClassName: nginx
+      tls:
+        - hosts:
+            - overseerr.koeff.com
+          secretName: overseerr-proxy-{{ .Environment.Name }}-tls
+      rules:
+        - host: overseerr.koeff.com
+          http:
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: overseerr-service
+                    port:
+                      number: 5055
+
+  # Headless Service acting as the Ingress backend.
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: overseerr-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 5055
+          targetPort: 5055
+
+  # Endpoints mapping the Service to your internal IP where the app is listening.
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: overseerr-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.144"
+        ports:
+          - port: 5055
