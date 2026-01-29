@@ -1,0 +1,7 @@
+helmfiles:
+  - path: helmfiles/{{ .Environment.Name }}/helmfile.yaml.gotmpl
+
+
+
+bases:
+  - environments/common/shared.yaml.gotmpl

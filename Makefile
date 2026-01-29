@@ -7,14 +7,13 @@ $(error FATAL ERROR: HFL_ENV is not set. Please set it by dot-sourcing from prot
 endif
 
 diff:
-	helmfile -e ${HFL_ENV} diff
-
+	helmfile -e ${HFL_ENV} -f helmfile.yaml.gotmpl diff
 
 apply:
-	helmfile -e ${HFL_ENV} apply
+	helmfile -e ${HFL_ENV} -f helmfile.yaml.gotmpl apply
 
 template:
-	helmfile -e ${HFL_ENV} template
+	helmfile -e ${HFL_ENV} -f helmfile.yaml.gotmpl template
 
 prephelm:
 	cd helm/packages/ && \

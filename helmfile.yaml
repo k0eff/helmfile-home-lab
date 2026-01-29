@@ -1,7 +1,0 @@
-helmfiles:
-  - path: helmfiles/{{ .Environment.Name }}/helmfile.yaml
-
-
-
-bases:
-  - environments/common/shared.yaml

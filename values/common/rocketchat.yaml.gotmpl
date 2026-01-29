@@ -1,0 +1,50 @@
+resources:
+  # Ingress resource for chat.koeff.com using HTTPS
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: rocketchat-ingress
+      annotations:
+        cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        # Optionally add a rewrite rule if your backend requires it:
+        # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    spec:
+      ingressClassName: nginx
+      tls:
+        - hosts:
+            - chat.koeff.com
+          secretName: rocketchat-{{ .Environment.Name }}-tls
+      rules:
+        - host: chat.koeff.com
+          http:
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: rocketchat-service
+                    port:
+                      number: 8080
+
+  # Headless Service acting as the Ingress backend.
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: rocketchat-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 8080
+          targetPort: 6666
+
+  # Endpoints mapping the Service to your internal IP where the app is listening.
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: rocketchat-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 6666
