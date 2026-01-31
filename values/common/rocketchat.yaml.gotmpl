@@ -7,6 +7,7 @@ resources:
       annotations:
         cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
         # Optionally add a rewrite rule if your backend requires it:
         # nginx.ingress.kubernetes.io/rewrite-target: /$1
     spec:
