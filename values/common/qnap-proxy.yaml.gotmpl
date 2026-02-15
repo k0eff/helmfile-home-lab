@@ -12,11 +12,21 @@ resources:
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/sl/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
+            nginx.ingress.kubernetes.io/custom-http-errors: "404"
+            nginx.ingress.kubernetes.io/proxy-intercept-errors: "on"
+            nginx.ingress.kubernetes.io/default-backend: koeff-404-service
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
                 add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
                 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+            nginx.ingress.kubernetes.io/server-snippet: |
+                error_page 404 /custom_404;
+                location = /custom_404 {
+                    internal;
+                    default_type text/html;
+                    return 404 '<!DOCTYPE html><html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 NOT FOUND - share.koeff.com</title><style>body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; } .header { display: flex; align-items: center; background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; } .logo { height: 48px; margin-right: 20px; border-radius: 8px; } .text { font-size: 26px; font-weight: 300; letter-spacing: 1px; border-left: 2px solid #f0f0f0; padding-left: 20px; color: #666; } .highlight { font-weight: 600; color: #0b1f3a; }</style></head><body><div class="header"><img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" class="logo" alt="Koeff Logo"><div class="text"><span class="highlight">404</span> NOT FOUND</div></div></body></html>';
+                }
                 {{- if .Values.brand.enabled }}
                 sub_filter_once off;
                 sub_filter_types text/html;
@@ -53,6 +63,9 @@ resources:
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/share/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
+            nginx.ingress.kubernetes.io/custom-http-errors: "404"
+            nginx.ingress.kubernetes.io/proxy-intercept-errors: "on"
+            nginx.ingress.kubernetes.io/default-backend: koeff-404-service
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
@@ -94,6 +107,9 @@ resources:
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
+            nginx.ingress.kubernetes.io/custom-http-errors: "404"
+            nginx.ingress.kubernetes.io/proxy-intercept-errors: "on"
+            nginx.ingress.kubernetes.io/default-backend: koeff-404-service
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
@@ -128,6 +144,35 @@ resources:
 -   apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
+        name: qnap-ingress-404
+        annotations:
+            cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+                default_type text/html;
+                return 404 '<!DOCTYPE html><html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 NOT FOUND - share.koeff.com</title><style>body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; } .header { display: flex; align-items: center; background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; } .logo { height: 48px; margin-right: 20px; border-radius: 8px; } .text { font-size: 26px; font-weight: 300; letter-spacing: 1px; border-left: 2px solid #f0f0f0; padding-left: 20px; color: #666; } .highlight { font-weight: 600; color: #0b1f3a; }</style></head><body><div class="header"><img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" class="logo" alt="Koeff Logo"><div class="text"><span class="highlight">404</span> NOT FOUND</div></div></body></html>';
+    spec:
+        ingressClassName: nginx
+        tls:
+        -   hosts:
+            -   share.koeff.com
+            secretName: qnap-proxy-{{ .Environment.Name }}-tls
+        rules:
+        -   host: share.koeff.com
+            http:
+                paths:
+                -   path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: koeff-404-service
+                            port:
+                                number: 80
+
+
+-   apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
         name: qnap-ingress-v3menu
         annotations:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
@@ -135,6 +180,9 @@ resources:
             nginx.ingress.kubernetes.io/rewrite-target: /v3_menu/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
+            nginx.ingress.kubernetes.io/custom-http-errors: "404"
+            nginx.ingress.kubernetes.io/proxy-intercept-errors: "on"
+            nginx.ingress.kubernetes.io/default-backend: koeff-404-service
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
