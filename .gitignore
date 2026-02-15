@@ -1,3 +1,4 @@
 protected/
 protected
 .DS_Store
+.venv/

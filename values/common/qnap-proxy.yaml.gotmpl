@@ -10,6 +10,17 @@ resources:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/sl/$1
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+                proxy_set_header Accept-Encoding "";
+                proxy_hide_header Content-Security-Policy;
+                add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+                {{- if .Values.brand.enabled }}
+                sub_filter_once off;
+                sub_filter_types text/html;
+                sub_filter_last_modified off;
+                sub_filter '<meta http-equiv="Content-Security-Policy"' '<meta http-equiv="X-Disabled-CSP"';
+                sub_filter '</head>' '<script src="https://cdn.jsdelivr.net/gh/k0eff/helmfile-home-lab@3c193ea7e5874ce6cb83acfab871455d22eea8fe/assets/brand.js"></script></head>';
+                {{- end }}
     spec:
         ingressClassName: nginx
         tls:
@@ -37,6 +48,17 @@ resources:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/share/$1
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+                proxy_set_header Accept-Encoding "";
+                proxy_hide_header Content-Security-Policy;
+                add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+                {{- if .Values.brand.enabled }}
+                sub_filter_once off;
+                sub_filter_types text/html;
+                sub_filter_last_modified off;
+                sub_filter '<meta http-equiv="Content-Security-Policy"' '<meta http-equiv="X-Disabled-CSP"';
+                sub_filter '</head>' '<script src="https://cdn.jsdelivr.net/gh/k0eff/helmfile-home-lab@3c193ea7e5874ce6cb83acfab871455d22eea8fe/assets/brand.js"></script></head>';
+                {{- end }}
     spec:
         ingressClassName: nginx
         tls:
@@ -64,6 +86,17 @@ resources:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/$1
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+                proxy_set_header Accept-Encoding "";
+                proxy_hide_header Content-Security-Policy;
+                add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+                {{- if .Values.brand.enabled }}
+                sub_filter_once off;
+                sub_filter_types text/html;
+                sub_filter_last_modified off;
+                sub_filter '<meta http-equiv="Content-Security-Policy"' '<meta http-equiv="X-Disabled-CSP"';
+                sub_filter '</head>' '<script src="https://cdn.jsdelivr.net/gh/k0eff/helmfile-home-lab@3c193ea7e5874ce6cb83acfab871455d22eea8fe/assets/brand.js"></script></head>';
+                {{- end }}
     spec:
         ingressClassName: nginx
         tls:
@@ -91,6 +124,17 @@ resources:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             nginx.ingress.kubernetes.io/rewrite-target: /v3_menu/$1
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+                proxy_set_header Accept-Encoding "";
+                proxy_hide_header Content-Security-Policy;
+                add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+                {{- if .Values.brand.enabled }}
+                sub_filter_once off;
+                sub_filter_types text/html;
+                sub_filter_last_modified off;
+                sub_filter '<meta http-equiv="Content-Security-Policy"' '<meta http-equiv="X-Disabled-CSP"';
+                sub_filter '</head>' '<script src="https://cdn.jsdelivr.net/gh/k0eff/helmfile-home-lab@3c193ea7e5874ce6cb83acfab871455d22eea8fe/assets/brand.js"></script></head>';
+                {{- end }}
     spec:
         ingressClassName: nginx
         tls:
@@ -108,4 +152,3 @@ resources:
                             name: qnap-qumagie-service
                             port:
                                 number: 8090
-
