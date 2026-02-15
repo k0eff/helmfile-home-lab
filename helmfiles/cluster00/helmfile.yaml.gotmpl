@@ -147,6 +147,13 @@ releases:
     values:
     - ../../values/common/qnap-proxy.yaml.gotmpl
 
+  - name: koeff-404
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/koeff-404.yaml.gotmpl
+
   - name: n8n-proxy
     chart: cloudnativeapp/raw
     installed: true
