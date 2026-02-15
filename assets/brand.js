@@ -6,19 +6,17 @@
             // Skip if already injected
             if (d.getElementById('koeff-brand')) return;
 
+            // Target the header container
+            var header = d.querySelector("[class*='Header-sc-']");
+            if (!header) return;
+
             var style = d.createElement("style");
             style.id = "koeff-brand-styles";
             style.textContent = [
-                "#koeff-brand { display: flex !important; align-items: center !important; gap: 12px !important; padding: 16px 24px !important; border-bottom: 1px solid #e8e8e8 !important; background: linear-gradient(90deg,#f7fbff 0%,#ffffff 35%,#f9f7ff 100%) !important; font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif !important; position: relative !important; z-index: 9999 !important; visibility: visible !important; opacity: 1 !important; }",
-                "#koeff-brand .koeff-logo-container { width: 44px !important; height: 44px !important; display: grid !important; place-items: center !important; border-radius: 12px !important; background: #0b1f3a !important; box-shadow: 0 6px 16px rgba(11,31,58,0.18) !important; visibility: visible !important; opacity: 1 !important; overflow: hidden !important; }",
-                "#koeff-brand .koeff-logo-container img { width: 100% !important; height: 100% !important; object-fit: contain !important; display: block !important; visibility: visible !important; opacity: 1 !important; }",
-                "#koeff-brand .koeff-text { display: flex !important; flex-direction: column !important; line-height: 1 !important; visibility: visible !important; opacity: 1 !important; }",
-                "#koeff-brand .koeff-domain { font-size: 12px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; color: #6b7a90 !important; margin-bottom: 6px !important; }",
-                "#koeff-brand .koeff-title { font-size: 20px !important; font-weight: 700 !important; color: #0b1f3a !important; }",
-                "#koeff-brand .koeff-title span { color: #2a5bd7 !important; }",
+                "#koeff-brand { display: flex !important; align-items: center !important; height: 40px !important; margin: 0 13px !important; padding: 0 !important; border-bottom: none !important; background: transparent !important; z-index: 9999 !important; visibility: visible !important; opacity: 1 !important; }",
+                "#koeff-brand img { height: 36px !important; width: auto !important; object-fit: contain !important; display: block !important; border-radius: 8px !important; box-shadow: 0 4px 12px rgba(11,31,58,0.15) !important; visibility: visible !important; opacity: 1 !important; }",
 
                 /* SURGICAL HIDING: Target logo icons only when they are direct children of the Header */
-                /* This prevents hiding checkboxes and toolbar buttons (which are inside <button> tags) */
                 "[class*='Header-sc-'] > .Icon__StyledIconComponent-loi9hp-0:not(#koeff-brand *):not(button *),",
                 "[class*='Header-sc-'] > .dAbISF:not(#koeff-brand *):not(button *),",
                 "img[alt*='QuMagie' i]:not(#koeff-brand *):not(button *),",
@@ -35,18 +33,17 @@
 
             var brand = d.createElement("div");
             brand.id = "koeff-brand";
-            brand.innerHTML = '<div class="koeff-logo-container"><img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" /></div><div class="koeff-text"><div class="koeff-domain">share.koeff.com</div><div class="koeff-title">Koeff <span>family</span> share</div></div>';
+            brand.innerHTML = '<img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" />';
 
-            if (d.body) {
-                d.body.prepend(brand);
-            }
+            header.prepend(brand);
         }
 
         injectBrand();
 
         if (typeof MutationObserver !== 'undefined') {
             var observer = new MutationObserver(function () {
-                if (!document.getElementById('koeff-brand')) {
+                var header = document.querySelector("[class*='Header-sc-']");
+                if (header && !document.getElementById('koeff-brand')) {
                     injectBrand();
                 }
             });
