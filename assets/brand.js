@@ -17,10 +17,12 @@
                 "#koeff-brand .koeff-title { font-size: 20px !important; font-weight: 700 !important; color: #0b1f3a !important; }",
                 "#koeff-brand .koeff-title span { color: #2a5bd7 !important; }",
 
-                ".Icon__StyledIconComponent-loi9hp-0:not(#koeff-brand *),",
-                ".dAbISF:not(#koeff-brand *),",
-                "img[alt*='QuMagie' i]:not(#koeff-brand *),",
-                "svg[class*='Icon__StyledIconComponent']:not(#koeff-brand *) {",
+                /* SURGICAL HIDING: Target logo icons only when they are direct children of the Header */
+                /* This prevents hiding checkboxes and toolbar buttons (which are inside <button> tags) */
+                "[class*='Header-sc-'] > .Icon__StyledIconComponent-loi9hp-0:not(#koeff-brand *):not(button *),",
+                "[class*='Header-sc-'] > .dAbISF:not(#koeff-brand *):not(button *),",
+                "img[alt*='QuMagie' i]:not(#koeff-brand *):not(button *),",
+                "svg[aria-label*='QuMagie' i]:not(#koeff-brand *):not(button *) {",
                 "    display: none !important;",
                 "    visibility: hidden !important;",
                 "    width: 0 !important;",
