@@ -8,7 +8,7 @@ resources:
         name: qnap-ingress-sl
         annotations:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/sl/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
@@ -60,7 +60,7 @@ resources:
         name: qnap-ingress-share
         annotations:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/share/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
@@ -105,7 +105,7 @@ resources:
         name: qnap-ingress-qumagie
         annotations:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
             nginx.ingress.kubernetes.io/rewrite-target: /qumagie/$1
             nginx.ingress.kubernetes.io/limit-rps: "30"
             nginx.ingress.kubernetes.io/limit-rpm: "800"
@@ -150,7 +150,7 @@ resources:
         name: qnap-ingress-404
         annotations:
             cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 default_type text/html;
                 return 404 '<!DOCTYPE html><html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 NOT FOUND - share.koeff.com</title><style>body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; } .header { display: flex; align-items: center; background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; } .logo { height: 48px; margin-right: 20px; border-radius: 8px; } .text { font-size: 26px; font-weight: 300; letter-spacing: 1px; border-left: 2px solid #f0f0f0; padding-left: 20px; color: #666; } .highlight { font-weight: 600; color: #0b1f3a; }</style></head><body><div class="header"><img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" class="logo" alt="Koeff Logo"><div class="text"><span class="highlight">404</span> NOT FOUND</div></div></body></html>';
