@@ -18,6 +18,7 @@ resources:
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
+                proxy_hide_header Upgrade;
                 add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
                 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
             nginx.ingress.kubernetes.io/server-snippet: |
@@ -69,6 +70,7 @@ resources:
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
+                proxy_hide_header Upgrade;
                 add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
                 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
                 {{- if .Values.brand.enabled }}
@@ -113,6 +115,7 @@ resources:
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
+                proxy_hide_header Upgrade;
                 add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
                 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
                 {{- if .Values.brand.enabled }}
@@ -186,6 +189,7 @@ resources:
             nginx.ingress.kubernetes.io/configuration-snippet: |
                 proxy_set_header Accept-Encoding "";
                 proxy_hide_header Content-Security-Policy;
+                proxy_hide_header Upgrade;
                 add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
                 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
                 {{- if .Values.brand.enabled }}
