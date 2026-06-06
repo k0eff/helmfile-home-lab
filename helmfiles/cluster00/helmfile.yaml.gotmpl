@@ -84,13 +84,15 @@ releases:
 
   - name: cert-manager
     chart: jetstack/cert-manager
-    version: 1.13.2
+    version: 1.20.2
     installed: true
     namespace: cert-manager
     set:
     - name: prometheus.enabled
       value: false
     - name: installCRDs
+      value: true
+    - name: config.enableGatewayAPI
       value: true
   - name: cert-manager-tokens
     chart: k0eff-home-lab-charts/helperChart
@@ -120,6 +122,26 @@ releases:
     - cert-manager/cert-manager
     values:
     - ../../values/{{ .Environment.Name }}/cert-manager-issuers.yaml.gotmpl
+
+  - name: envoy-gateway
+    chart: oci://docker.io/envoyproxy/gateway-helm
+    version: v1.8.0
+    installed: true
+    namespace: envoy-gateway-system
+    createNamespace: true
+    set:
+    - name: kubernetesClusterDomain
+      value: cluster00.local
+
+  - name: gateway-public-v2
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs:
+    - envoy-gateway-system/envoy-gateway
+    - cert-manager/cert-manager
+    values:
+    - ../../values/common/gateway-public-v2.yaml.gotmpl
 
 
 

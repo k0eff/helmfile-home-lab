@@ -1,0 +1,174 @@
+resources:
+  - apiVersion: gateway.envoyproxy.io/v1alpha1
+    kind: EnvoyProxy
+    metadata:
+      name: koeff-public-v2-proxy-config
+    spec:
+      provider:
+        type: Kubernetes
+        kubernetes:
+          envoyService:
+            externalTrafficPolicy: Cluster
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: GatewayClass
+    metadata:
+      name: eg
+    spec:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: koeff-public-v2
+      annotations:
+        cert-manager.io/cluster-issuer: cloudflare-{{ .Environment.Name }}
+    spec:
+      gatewayClassName: eg
+      infrastructure:
+        parametersRef:
+          group: gateway.envoyproxy.io
+          kind: EnvoyProxy
+          name: koeff-public-v2-proxy-config
+      addresses:
+        - type: IPAddress
+          value: 192.168.31.237
+      listeners:
+        - name: http
+          protocol: HTTP
+          port: 80
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-chat-v2
+          hostname: chat-v2.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: chat-v2-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-n8n-v2
+          hostname: n8n-v2.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: n8n-v2-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-overseerr-v2
+          hostname: overseerr-v2.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: overseerr-v2-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-shareurl-v2
+          hostname: shareurl-v2.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: shareurl-v2-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: koeff-public-v2-smoke
+    spec:
+      parentRefs:
+        - name: koeff-public-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: nginx-url-converter
+              port: 80
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: chat-v2
+    spec:
+      hostnames:
+        - chat-v2.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: rocketchat-service
+              port: 8080
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: n8n-v2
+    spec:
+      hostnames:
+        - n8n-v2.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: n8n-service
+              port: 5678
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: overseerr-v2
+    spec:
+      hostnames:
+        - overseerr-v2.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: overseerr-service
+              port: 5055
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: shareurl-v2
+    spec:
+      hostnames:
+        - shareurl-v2.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: nginx-url-converter
+              port: 80
