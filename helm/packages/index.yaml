@@ -3,7 +3,20 @@ entries:
   helperChart:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-09-24T23:23:13.007212+03:00"
+    created: "2026-06-06T22:20:15.402561+03:00"
+    description: Storage class
+    digest: ec7ca64bf3603af84f07463ed148a8bdb40d9105a69fcfb162ed9ec2e5f15236
+    maintainers:
+    - name: Krasimir Koeff
+      url: github.com/k0eff
+    name: helperChart
+    type: application
+    urls:
+    - https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/helperChart-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-06T22:20:15.402441+03:00"
     description: Storage class
     digest: 4393a1300e575f47657d0d66368bf84aada291d511be822a27e93a785fe05faf
     maintainers:
@@ -14,4 +27,4 @@ entries:
     urls:
     - https://github.com/k0eff/helmfile-home-lab/raw/main/helm/packages/helperChart-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-24T23:23:13.006981+03:00"
+generated: "2026-06-06T22:20:15.402045+03:00"

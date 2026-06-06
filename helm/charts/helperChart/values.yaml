@@ -1,5 +1,8 @@
 ---
 helperchart:
+  ipaddresspool:
+    l2Advertisement:
+      enabled: false
   storageClass:
     name: "cluster00-storage-datastore1"
     provisioner: "csi.vsphere.vmware.com"

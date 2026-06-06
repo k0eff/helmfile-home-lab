@@ -1,0 +1,16 @@
+{{- if .Values.helperchart }}
+{{- if .Values.helperchart.ipaddresspool }}
+{{- if .Values.helperchart.ipaddresspool.l2Advertisement }}
+{{- if .Values.helperchart.ipaddresspool.l2Advertisement.enabled }}
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: {{ default .Values.helperchart.ipaddresspool.name .Values.helperchart.ipaddresspool.l2Advertisement.name }}
+  namespace: {{ .Values.helperchart.ipaddresspool.namespace }}
+spec:
+  ipAddressPools:
+    - {{ .Values.helperchart.ipaddresspool.name }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
