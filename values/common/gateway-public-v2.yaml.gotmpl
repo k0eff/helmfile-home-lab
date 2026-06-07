@@ -84,6 +84,114 @@ resources:
           allowedRoutes:
             namespaces:
               from: Same
+        - name: https-share-v2
+          hostname: share-v2.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: share-v2-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: share-v2-proxy-nginx
+    data:
+      default.conf: |
+        server {
+          listen 8080;
+          server_name _;
+          resolver 169.254.25.10 valid=30s ipv6=off;
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header Accept-Encoding "";
+          proxy_hide_header Content-Security-Policy;
+          proxy_hide_header Upgrade;
+          proxy_intercept_errors on;
+
+          add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+          add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net *.googleapis.com *.jwpcdn.com; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: https://raw.githubusercontent.com *.googleapis.com *.jwpcdn.com; font-src 'self' data: fonts.gstatic.com; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'self'; worker-src 'self' blob:;" always;
+
+          sub_filter_once off;
+          sub_filter_types text/html;
+          sub_filter_last_modified off;
+          sub_filter '<meta http-equiv="Content-Security-Policy"' '<meta http-equiv="X-Disabled-CSP"';
+          sub_filter '</head>' '<meta property="og:title" content="Koeff Family File Share"><meta property="og:image" content="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-heart.png"><meta property="og:image:width" content="128"><meta property="og:image:height" content="128"><meta property="og:type" content="website"><script src="https://cdn.jsdelivr.net/gh/k0eff/helmfile-home-lab@3c193ea7e5874ce6cb83acfab871455d22eea8fe/assets/brand.js"></script></head>';
+
+          error_page 404 /custom_404;
+
+          location = /custom_404 {
+            internal;
+            default_type text/html;
+            return 404 '<!DOCTYPE html><html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 NOT FOUND - share-v2.koeff.com</title><style>body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; } .header { display: flex; align-items: center; background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; } .logo { height: 48px; margin-right: 20px; border-radius: 8px; } .text { font-size: 26px; font-weight: 300; letter-spacing: 1px; border-left: 2px solid #f0f0f0; padding-left: 20px; color: #666; } .highlight { font-weight: 600; color: #0b1f3a; }</style></head><body><div class="header"><img src="https://raw.githubusercontent.com/k0eff/helmfile-home-lab/main/assets/share.koeff.com-logo-blurred.webp" class="logo" alt="Koeff Logo"><div class="text"><span class="highlight">404</span> NOT FOUND</div></div></body></html>';
+          }
+
+          location ~ ^/sl/(.*)$ {
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/sl/$1;
+          }
+
+          location ~ ^/share/(.*)$ {
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/share/$1;
+          }
+
+          location ~ ^/qumagie/(.*)$ {
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/$1;
+          }
+
+          location ~ ^/v3_menu/(.*)$ {
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/v3_menu/$1;
+          }
+
+          location / {
+            return 404;
+          }
+        }
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: share-v2-proxy
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: share-v2-proxy
+      template:
+        metadata:
+          labels:
+            app: share-v2-proxy
+        spec:
+          containers:
+            - name: nginx
+              image: nginx:1.27-alpine
+              ports:
+                - containerPort: 8080
+              volumeMounts:
+                - name: nginx-config
+                  mountPath: /etc/nginx/conf.d/default.conf
+                  subPath: default.conf
+          volumes:
+            - name: nginx-config
+              configMap:
+                name: share-v2-proxy-nginx
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: share-v2-proxy-service
+    spec:
+      selector:
+        app: share-v2-proxy
+      ports:
+        - port: 8080
+          targetPort: 8080
 
   - apiVersion: gateway.networking.k8s.io/v1
     kind: HTTPRoute
@@ -187,3 +295,24 @@ resources:
           backendRefs:
             - name: nginx-url-converter
               port: 80
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: share-v2
+    spec:
+      hostnames:
+        - share-v2.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: http
+        - name: koeff-public-v2
+          sectionName: https-share-v2
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: share-v2-proxy-service
+              port: 8080
