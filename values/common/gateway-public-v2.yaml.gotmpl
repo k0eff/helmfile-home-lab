@@ -135,19 +135,19 @@ resources:
           }
 
           location ~ ^/sl/(.*)$ {
-            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/sl/$1;
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/sl/$1$is_args$args;
           }
 
           location ~ ^/share/(.*)$ {
-            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/share/$1;
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/share/$1$is_args$args;
           }
 
           location ~ ^/qumagie/(.*)$ {
-            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/$1;
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/qumagie/$1$is_args$args;
           }
 
           location ~ ^/v3_menu/(.*)$ {
-            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/v3_menu/$1;
+            proxy_pass http://qnap-qumagie-service.ns-homelab-main.svc.cluster00.local:8090/v3_menu/$1$is_args$args;
           }
 
           location / {
