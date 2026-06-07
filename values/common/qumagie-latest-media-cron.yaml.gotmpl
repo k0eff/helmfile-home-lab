@@ -1,0 +1,69 @@
+{{- if .Values.qumagieLatestMedia.enabled }}
+templates:
+- |
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: qumagie-latest-media-auth
+    namespace: {{ .Values.qumagieLatestMedia.namespace }}
+  stringData:
+    QUMAGIE_BASE_URL: {{ requiredEnv "QUMAGIE_BASE_URL" | quote }}
+    QUMAGIE_USERNAME: {{ requiredEnv "QUMAGIE_USERNAME" | quote }}
+    QUMAGIE_PASSWORD: {{ requiredEnv "QUMAGIE_PASSWORD" | quote }}
+
+- |
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: qumagie-latest-media-script
+    namespace: {{ .Values.qumagieLatestMedia.namespace }}
+  data:
+    qumagie_latest_media_probe.py: |
+{{ readFile "../../scripts/qumagie_latest_media_probe.py" | indent 6 }}
+
+- |
+  apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: qumagie-latest-media-check
+    namespace: {{ .Values.qumagieLatestMedia.namespace }}
+  spec:
+    schedule: {{ .Values.qumagieLatestMedia.schedule | quote }}
+    concurrencyPolicy: Forbid
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 3
+    jobTemplate:
+      spec:
+        backoffLimit: 0
+        template:
+          spec:
+            restartPolicy: Never
+            containers:
+            - name: qumagie-latest-media-check
+              image: {{ .Values.qumagieLatestMedia.image.repository }}:{{ .Values.qumagieLatestMedia.image.tag }}
+              imagePullPolicy: IfNotPresent
+              command:
+              - /bin/sh
+              - -ec
+              - |
+                python3 -u /opt/qumagie/qumagie_latest_media_probe.py \
+                  --base-url "$QUMAGIE_BASE_URL" \
+                  --username "$QUMAGIE_USERNAME" \
+                  --count "$QUMAGIE_COUNT" \
+                  --probe-all-images
+              envFrom:
+              - secretRef:
+                  name: qumagie-latest-media-auth
+              env:
+              - name: QUMAGIE_COUNT
+                value: {{ .Values.qumagieLatestMedia.count | quote }}
+              volumeMounts:
+              - name: qumagie-script
+                mountPath: /opt/qumagie
+                readOnly: true
+            volumes:
+            - name: qumagie-script
+              configMap:
+                name: qumagie-latest-media-script
+                defaultMode: 0555
+{{- end }}

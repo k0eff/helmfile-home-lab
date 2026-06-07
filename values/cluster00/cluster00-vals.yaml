@@ -1,0 +1,8 @@
+qumagieLatestMedia:
+  enabled: true
+  namespace: ns-homelab-main
+  schedule: "*/30 0-6 * * *"
+  count: 1000
+  image:
+    repository: python
+    tag: "3.12-slim"
