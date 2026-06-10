@@ -79,7 +79,7 @@ releases:
     version: 4.11.2
     namespace: ns-homelab-main
     values:
-    - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml
+    - ../../values/{{ .Environment.Name }}/ingress-nginx.yaml.gotmpl
 
 
   - name: cert-manager
@@ -142,6 +142,16 @@ releases:
     - cert-manager/cert-manager
     values:
     - ../../values/common/gateway-public-v2.yaml.gotmpl
+
+  - name: gateway-public-prod
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    needs:
+    - envoy-gateway-system/envoy-gateway
+    - cert-manager/cert-manager
+    values:
+    - ../../values/common/gateway-public-prod.yaml.gotmpl
 
 
 

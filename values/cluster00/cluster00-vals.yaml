@@ -6,3 +6,9 @@ qumagieLatestMedia:
   image:
     repository: python
     tag: "3.12-slim"
+
+gatewayApiCutover:
+  active: true
+  productionVip: 192.168.31.235
+  rollbackVip: 192.168.31.239
+  stagingVip: 192.168.31.238
