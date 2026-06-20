@@ -95,6 +95,17 @@ resources:
           allowedRoutes:
             namespaces:
               from: Same
+        - name: https-portainer
+          hostname: portainer.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: portainer-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
 
   - apiVersion: v1
     kind: ConfigMap

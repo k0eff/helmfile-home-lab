@@ -181,6 +181,13 @@ releases:
     values:
     - ../../values/common/qnap-proxy.yaml.gotmpl
 
+  - name: portainer-gateway
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/portainer-gateway.yaml.gotmpl
+
   - name: koeff-404
     chart: cloudnativeapp/raw
     installed: true
