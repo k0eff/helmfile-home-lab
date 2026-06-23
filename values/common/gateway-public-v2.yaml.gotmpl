@@ -150,6 +150,17 @@ resources:
           allowedRoutes:
             namespaces:
               from: Same
+        - name: https-prometheus
+          hostname: prometheus.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: prometheus-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
 
   - apiVersion: v1
     kind: ConfigMap

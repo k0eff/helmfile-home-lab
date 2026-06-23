@@ -155,6 +155,58 @@ resources:
             - name: headroom-service
               port: 8787
 
+  # --- Prometheus ---
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: prometheus-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 9090
+          targetPort: 9090
+
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: prometheus-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 9090
+
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: prometheus-local-koeff-com-tls
+    spec:
+      secretName: prometheus-local-koeff-com-tls
+      issuerRef:
+        name: cloudflare-{{ .Environment.Name }}
+        kind: ClusterIssuer
+      dnsNames:
+        - prometheus.local.koeff.com
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: prometheus-local
+    spec:
+      hostnames:
+        - prometheus.local.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: https-prometheus
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: prometheus-service
+              port: 9090
+
   # --- Grafana ---
   - apiVersion: v1
     kind: Service
