@@ -188,6 +188,13 @@ releases:
     values:
     - ../../values/common/portainer-gateway.yaml.gotmpl
 
+  - name: ai-stack-gateway
+    chart: cloudnativeapp/raw
+    installed: true
+    namespace: ns-homelab-main
+    values:
+    - ../../values/common/ai-stack-gateway.yaml.gotmpl
+
   - name: koeff-404
     chart: cloudnativeapp/raw
     installed: true

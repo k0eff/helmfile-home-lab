@@ -1,0 +1,208 @@
+resources:
+  # --- LiteLLM ---
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: litellm-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 4000
+          targetPort: 4000
+
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: litellm-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 4000
+
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: litellm-local-koeff-com-tls
+    spec:
+      secretName: litellm-local-koeff-com-tls
+      issuerRef:
+        name: cloudflare-{{ .Environment.Name }}
+        kind: ClusterIssuer
+      dnsNames:
+        - litellm.local.koeff.com
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: litellm-local
+    spec:
+      hostnames:
+        - litellm.local.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: https-litellm
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: litellm-service
+              port: 4000
+
+  # --- Qdrant ---
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: qdrant-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 6333
+          targetPort: 6333
+
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: qdrant-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 6333
+
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: qdrant-local-koeff-com-tls
+    spec:
+      secretName: qdrant-local-koeff-com-tls
+      issuerRef:
+        name: cloudflare-{{ .Environment.Name }}
+        kind: ClusterIssuer
+      dnsNames:
+        - qdrant.local.koeff.com
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: qdrant-local
+    spec:
+      hostnames:
+        - qdrant.local.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: https-qdrant
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: qdrant-service
+              port: 6333
+
+  # --- Headroom ---
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: headroom-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 8787
+          targetPort: 8787
+
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: headroom-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 8787
+
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: headroom-local-koeff-com-tls
+    spec:
+      secretName: headroom-local-koeff-com-tls
+      issuerRef:
+        name: cloudflare-{{ .Environment.Name }}
+        kind: ClusterIssuer
+      dnsNames:
+        - headroom.local.koeff.com
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: headroom-local
+    spec:
+      hostnames:
+        - headroom.local.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: https-headroom
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: headroom-service
+              port: 8787
+
+  # --- Grafana ---
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: grafana-service
+    spec:
+      clusterIP: None
+      ports:
+        - port: 3000
+          targetPort: 3000
+
+  - apiVersion: v1
+    kind: Endpoints
+    metadata:
+      name: grafana-service
+    subsets:
+      - addresses:
+          - ip: "192.168.31.152"
+        ports:
+          - port: 3000
+
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: grafana-local-koeff-com-tls
+    spec:
+      secretName: grafana-local-koeff-com-tls
+      issuerRef:
+        name: cloudflare-{{ .Environment.Name }}
+        kind: ClusterIssuer
+      dnsNames:
+        - grafana.local.koeff.com
+
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: grafana-local
+    spec:
+      hostnames:
+        - grafana.local.koeff.com
+      parentRefs:
+        - name: koeff-public-v2
+          sectionName: https-grafana
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: grafana-service
+              port: 3000

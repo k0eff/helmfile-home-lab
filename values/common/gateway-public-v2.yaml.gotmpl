@@ -106,6 +106,50 @@ resources:
           allowedRoutes:
             namespaces:
               from: Same
+        - name: https-litellm
+          hostname: litellm.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: litellm-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-qdrant
+          hostname: qdrant.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: qdrant-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-headroom
+          hostname: headroom.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: headroom-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
+        - name: https-grafana
+          hostname: grafana.local.koeff.com
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: grafana-local-koeff-com-tls
+          allowedRoutes:
+            namespaces:
+              from: Same
 
   - apiVersion: v1
     kind: ConfigMap
