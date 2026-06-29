@@ -151,6 +151,9 @@ resources:
             - path:
                 type: PathPrefix
                 value: /
+          timeouts:
+            request: 600s
+            backendRequest: 600s
           backendRefs:
             - name: headroom-service
               port: 8787
