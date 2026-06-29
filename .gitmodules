@@ -1,0 +1,3 @@
+[submodule "protected"]
+	path = protected
+	url = https://github.com/k0eff/helmfile-home-lab-protected.git
