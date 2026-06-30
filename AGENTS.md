@@ -26,3 +26,16 @@ variable values themselves must never appear in this repo.
 ### If you are unsure
 
 When in doubt, put the value in the `protected/` repo and reference it as a variable.
+
+## Evaluation System
+
+Every implementation task requires an eval JSON in `evals/`.
+
+**Format:** `NNN-{branch-slug}-{category}--{description}.json`
+- `branch-slug`: `git branch --show-current | sed 's|/|-|g'`
+- `NNN`: sequential per branch — find highest matching in `evals/`, increment by 1
+- **Create with `status: "pending"` BEFORE coding. Set `status: "pass"` after validation.**
+- Include "eval" or eval filename in commit message.
+- Update existing eval if same file already covered. Supersede: set old `status: "disabled"`.
+
+Full documentation: [koeff-gitroot-main/EVALS.md](https://github.com/k0eff/koeff-gitroot-main/blob/main/EVALS.md)
